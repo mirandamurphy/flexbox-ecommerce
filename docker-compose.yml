@@ -1,5 +1,26 @@
 services:
 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flexbox-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://app-db:5432/${APP_DB}
+      SPRING_DATASOURCE_USERNAME: ${DB_APP_ROLE}
+      SPRING_DATASOURCE_PASSWORD: ${DB_APP_PASSWORD}
+      # Migration user for Flyway
+      DB_MIGRATION_ROLE: ${DB_MIGRATION_ROLE}
+      MIGRATION_DB_PASSWORD: ${MIGRATION_DB_PASSWORD}
+    depends_on:
+      app-db:
+        condition: service_healthy # wait for PostgreSQL health check to pass
+
   app-db:
     image: postgres:18
     container_name: flexbox-app-db
@@ -29,6 +50,9 @@ services:
     image: postgres:18
     container_name: flexbox-sandbox-db
     restart: unless-stopped
+    # Do not auto-config this container
+    labels:
+      org.springframework.boot.ignore: "true"
     env_file:
       - .env
     environment:

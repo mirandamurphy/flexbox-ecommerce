@@ -6,7 +6,7 @@ echo "Granting privileges for ${DB_MIGRATION_ROLE} and ${DB_APP_ROLE} on the ${A
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$APP_DB" <<-EOSQL
 
   -- Grants the specified roles the ability to connect to the 'flexbox' database
-  GRANT CONNECT ON DATABASE ${POSTGRES_DB} TO ${DB_MIGRATION_ROLE}, ${DB_APP_ROLE};
+  GRANT CONNECT ON DATABASE ${APP_DB} TO ${DB_MIGRATION_ROLE}, ${DB_APP_ROLE};
 
   -- Grants the specified role the ability to use and create within the 'public' schema
   GRANT USAGE, CREATE ON SCHEMA public TO ${DB_MIGRATION_ROLE};
