@@ -29,10 +29,10 @@ buildNumber.properties
 logs/
 
 # Spring Boot
-application-local.yml
-application-local.yaml
 application-dev.yml
-application-dev.yaml
+application-test.yaml
+application-dev.yml
+application-test.yaml
 
 # Generated Spring Boot files
 spring.log
@@ -87,3 +87,6 @@ coverage/
 nbproject/private/
 build/
 dist/!/.idea/
+
+# Internal Docs
+!/docs-internal/
