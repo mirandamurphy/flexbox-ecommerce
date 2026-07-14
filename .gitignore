@@ -62,8 +62,11 @@ out/
 Thumbs.db
 
 # Environment files
+# Ignore local environment credentials
 .env
-.env.*
+# Do not ignore the example template
+!.env.example
+
 
 # Temporary files
 tmp/
@@ -88,5 +91,6 @@ nbproject/private/
 build/
 dist/!/.idea/
 
-# Internal Docs
-!/docs-internal/
+
+
+

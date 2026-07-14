@@ -1,29 +1,52 @@
 services:
 
-  postgres:
+  app-db:
     image: postgres:18
-    container_name: flexbox-postgres-dev
+    container_name: flexbox-app-db
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${APP_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: America/Halifax
     ports:
-      - "5434:5432"
-    restart: unless-stopped
-
+      # If APP_DB_PORT_HOST is not set it defaults to 5432
+      - "${APP_DB_PORT_HOST:-5432}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/18/docker
-      # All scripts in the ./init-db directory execute when the container starts for the first time
-      - ./database/init:/docker-entrypoint-initdb.d/create_database.sql
-
-
+      - app-postgres-data:/var/lib/postgresql/18/docker
+      # Run scripts when the container starts for the first time
+      - ./database/app-init:/docker-entrypoint-initdb.d
     # Make sure Spring Boot waits until PostgreSQL is ready
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 5s
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${APP_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sandbox-db:
+    image: postgres:18
+    container_name: flexbox-sandbox-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${SANDBOX_DB}
+      POSTGRES_USER: ${POSTGRES_SANDBOX}
+      POSTGRES_PASSWORD: ${SANDBOX_PASSWORD}
+      TZ: America/Halifax
+    ports:
+      # If SB_DB_PORT_HOST is not set it defaults to 5433
+      - "${SB_DB_PORT_HOST:-5433}:5432"
+    volumes:
+      - sandbox-postgres-data:/var/lib/postgresql/18/docker
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_SANDBOX} -d ${SANDBOX_DB}" ]
+      interval: 10s
       timeout: 5s
       retries: 5
 
 volumes:
-  pgdata:
+  app-postgres-data:
+  sandbox-postgres-data:
