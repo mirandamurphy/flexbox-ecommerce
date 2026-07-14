@@ -2,7 +2,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./flexbox-backend
       dockerfile: Dockerfile
     container_name: flexbox-backend
     restart: unless-stopped
