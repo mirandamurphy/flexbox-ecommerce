@@ -39,12 +39,12 @@ public class CheckoutSession {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "checkout_session_mode")
+    @Column(columnDefinition = "checkout_session_mode", nullable = false)
     private CheckoutSessionMode mode;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "checkout_session_status")
+    @Column(columnDefinition = "checkout_session_status", nullable = false)
     private CheckoutSessionStatus status;
 
     @Column(name = "amount_subtotal", precision = 7, scale = 2)

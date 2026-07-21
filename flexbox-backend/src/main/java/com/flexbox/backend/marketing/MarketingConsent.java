@@ -24,7 +24,7 @@ public class MarketingConsent {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "marketing_consent_action")
+    @Column(columnDefinition = "marketing_consent_action", nullable = false)
     private MarketingConsentAction action;
 
     @Column(name = "created_at")

@@ -24,7 +24,7 @@ public class Cart {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "cart_status")
+    @Column(columnDefinition = "cart_status", nullable = false)
     private CartStatus status;
 
     @Column(name = "created_at")

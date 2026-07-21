@@ -28,7 +28,7 @@ public class Token {
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "token_type not null")
+    @Column(columnDefinition = "token_type not null", nullable = false)
     private TokenType type;
 
     @ColumnDefault("false")
