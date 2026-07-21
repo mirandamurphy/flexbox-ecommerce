@@ -46,7 +46,8 @@ public class Address {
     @Column(name = "country", length = 2)
     private String country;
 
-    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "address_type")
     private AddressType type;
 
     @ColumnDefault("false")

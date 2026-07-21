@@ -20,8 +20,10 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // Store the String rep. of the enum value instead of orig integer index
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "cart_status")
-    private Object status;
+    private CartStatus status;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
