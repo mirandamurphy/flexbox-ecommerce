@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -40,8 +42,10 @@ public class Payment {
     @Column(name = "paid_at")
     private OffsetDateTime paidAt;
 
-    @Column(name = "status", columnDefinition = "payment_status")
-    private Object status;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "payment_status")
+    private PaymentStatus status;
 
 
 }

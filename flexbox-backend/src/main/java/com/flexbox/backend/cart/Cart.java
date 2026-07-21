@@ -4,6 +4,8 @@ import com.flexbox.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -20,8 +22,10 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "status", columnDefinition = "cart_status")
-    private Object status;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "cart_status", nullable = false)
+    private CartStatus status;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;

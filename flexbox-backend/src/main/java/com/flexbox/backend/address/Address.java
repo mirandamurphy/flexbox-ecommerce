@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -33,20 +35,24 @@ public class Address {
     @Column(name = "po_box_number", length = Integer.MAX_VALUE)
     private String poBoxNumber;
 
-    @Column(name = "city", length = Integer.MAX_VALUE)
+    @Column(name = "city", length = Integer.MAX_VALUE, nullable = false)
     private String city;
 
-    @Column(name = "province", columnDefinition = "provinces")
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "province", columnDefinition = "provinces", nullable = false)
     private Object province;
 
-    @Column(name = "postal_code", length = 7)
+    @Column(name = "postal_code", length = 7, nullable = false)
     private String postalCode;
 
     @ColumnDefault("'CA'")
-    @Column(name = "country", length = 2)
+    @Column(name = "country", length = 2, nullable = false)
     private String country;
 
-    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "address_type", nullable = false)
     private AddressType type;
 
     @ColumnDefault("false")
