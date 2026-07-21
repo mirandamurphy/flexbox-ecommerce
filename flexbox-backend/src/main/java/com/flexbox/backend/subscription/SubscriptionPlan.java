@@ -6,6 +6,8 @@ import com.flexbox.backend.catalog.SubscriptionBox;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -59,8 +61,9 @@ public class SubscriptionPlan {
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
-    @Column(name = "status", columnDefinition = "subscription_plan_status")
-    private Object status;
-
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "subscription_plan_status")
+    private SubscriptionPlanStatus status;
 
 }

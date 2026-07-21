@@ -6,6 +6,8 @@ import com.flexbox.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -35,11 +37,15 @@ public class CheckoutSession {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @Column(name = "mode", columnDefinition = "checkout_session_mode")
-    private Object mode;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "checkout_session_mode")
+    private CheckoutSessionMode mode;
 
-    @Column(name = "status", columnDefinition = "checkout_session_status")
-    private Object status;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "checkout_session_status")
+    private CheckoutSessionStatus status;
 
     @Column(name = "amount_subtotal", precision = 7, scale = 2)
     private BigDecimal amountSubtotal;

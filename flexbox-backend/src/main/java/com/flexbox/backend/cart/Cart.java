@@ -4,6 +4,8 @@ import com.flexbox.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -20,9 +22,9 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Store the String rep. of the enum value instead of orig integer index
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "cart_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "cart_status")
     private CartStatus status;
 
     @Column(name = "created_at")

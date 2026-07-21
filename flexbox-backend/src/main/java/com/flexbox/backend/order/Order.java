@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -38,8 +40,10 @@ public class Order {
     @Column(name = "total_amount", precision = 7, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "order_status", columnDefinition = "order_status")
-    private Object orderStatus;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "order_status")
+    private OrderStatus orderStatus;
 
     @Column(name = "order_date")
     private OffsetDateTime orderDate;

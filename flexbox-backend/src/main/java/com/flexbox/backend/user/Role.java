@@ -1,11 +1,10 @@
 package com.flexbox.backend.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Setter
@@ -16,8 +15,10 @@ public class Role {
     @Column(name = "role_id", nullable = false)
     private Long id;
 
-    @Column(name = "name", columnDefinition = "role_name")
-    private Object name;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "role_name")
+    private RoleName name;
 
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;

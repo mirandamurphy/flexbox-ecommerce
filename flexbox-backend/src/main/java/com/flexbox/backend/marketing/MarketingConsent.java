@@ -4,6 +4,8 @@ import com.flexbox.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -20,8 +22,10 @@ public class MarketingConsent {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "action", columnDefinition = "marketing_consent_action")
-    private Object action;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "marketing_consent_action")
+    private MarketingConsentAction action;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
