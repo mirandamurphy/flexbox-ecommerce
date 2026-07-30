@@ -11,12 +11,15 @@ services:
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://app-db:5432/${APP_DB}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://app-db:5432/${APP_DB}?stringtype=unspecified
       SPRING_DATASOURCE_USERNAME: ${DB_APP_ROLE}
       SPRING_DATASOURCE_PASSWORD: ${DB_APP_PASSWORD}
       # Migration user for Flyway
       DB_MIGRATION_ROLE: ${DB_MIGRATION_ROLE}
       MIGRATION_DB_PASSWORD: ${MIGRATION_DB_PASSWORD}
+      # Stripe
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
     depends_on:
       app-db:
         condition: service_healthy # wait for PostgreSQL health check to pass
