@@ -21,7 +21,7 @@ public class Cart {
     private User user;
 
     @Column(name = "status", columnDefinition = "cart_status")
-    private Object status;
+    private CartStatus status;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;

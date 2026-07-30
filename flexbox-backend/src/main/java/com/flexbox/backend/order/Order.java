@@ -39,7 +39,7 @@ public class Order {
     private BigDecimal totalAmount;
 
     @Column(name = "order_status", columnDefinition = "order_status")
-    private Object orderStatus;
+    private OrderStatus orderStatus;
 
     @Column(name = "order_date")
     private OffsetDateTime orderDate;

@@ -41,7 +41,7 @@ public class Payment {
     private OffsetDateTime paidAt;
 
     @Column(name = "status", columnDefinition = "payment_status")
-    private Object status;
+    private PaymentStatus status;
 
 
 }

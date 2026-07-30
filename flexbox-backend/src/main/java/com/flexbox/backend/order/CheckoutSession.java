@@ -36,10 +36,10 @@ public class CheckoutSession {
     private Payment payment;
 
     @Column(name = "mode", columnDefinition = "checkout_session_mode")
-    private Object mode;
+    private CheckoutSessionMode mode;
 
     @Column(name = "status", columnDefinition = "checkout_session_status")
-    private Object status;
+    private CheckoutSessionStatus status;
 
     @Column(name = "amount_subtotal", precision = 7, scale = 2)
     private BigDecimal amountSubtotal;
