@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @Table(name = "marketing_consent", schema = "public")
 public class MarketingConsent {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "consent_id", nullable = false)
     private Long id;
 

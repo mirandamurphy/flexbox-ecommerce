@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @Table(name = "cart", schema = "public")
 public class Cart {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id", nullable = false)
     private Long id;
 

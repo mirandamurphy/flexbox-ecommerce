@@ -17,6 +17,7 @@ import java.util.UUID;
         columnNames = {"stripe_payment_intent_id"})})
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id", nullable = false)
     private Long id;
 

@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
         columnNames = {"stripe_subscription_id"})})
 public class SubscriptionPlan {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subscription_plan_id", nullable = false)
     private Long id;
 

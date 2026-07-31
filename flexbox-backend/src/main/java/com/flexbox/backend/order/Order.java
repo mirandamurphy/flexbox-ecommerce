@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 @Table(name = "\"order\"", schema = "public")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id", nullable = false)
     private Long id;
 

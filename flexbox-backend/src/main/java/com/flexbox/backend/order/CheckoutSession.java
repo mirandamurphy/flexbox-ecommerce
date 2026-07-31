@@ -17,6 +17,7 @@ import java.time.OffsetDateTime;
         columnNames = {"stripe_session_id"})})
 public class CheckoutSession {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "checkout_session_id", nullable = false)
     private Long id;
 

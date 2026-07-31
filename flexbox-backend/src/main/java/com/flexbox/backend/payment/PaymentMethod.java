@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
         columnNames = {"stripe_payment_method_id"})})
 public class PaymentMethod {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_method_id", nullable = false)
     private Long id;
 

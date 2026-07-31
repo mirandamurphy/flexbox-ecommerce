@@ -16,6 +16,7 @@ import java.util.Map;
         columnNames = {"stripe_event_id"})})
 public class WebhookEvent {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stripe_webhook_event_id", nullable = false)
     private Long id;
 

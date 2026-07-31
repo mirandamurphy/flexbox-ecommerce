@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 @Table(name = "cart_item", schema = "public")
 public class CartItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_item_id", nullable = false)
     private Long id;
 

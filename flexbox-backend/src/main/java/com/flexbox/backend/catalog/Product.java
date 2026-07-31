@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
         columnNames = {"sku"})})
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
     private Long id;
 

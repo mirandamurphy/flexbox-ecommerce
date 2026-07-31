@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
         columnNames = {"token_value"})})
 public class Token {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id", nullable = false)
     private Long id;
 
