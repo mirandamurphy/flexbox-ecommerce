@@ -14,6 +14,8 @@ public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox
     @EntityGraph(attributePaths = {"subscription_box_price", "subscription_box_product"})
     List<SubscriptionBox> findAll();
 
+
+
     // GET /subscription-boxes?name=
     Optional<SubscriptionBox> findByNameIgnoreCase(String name, Sort sort, Limit limit);
 
