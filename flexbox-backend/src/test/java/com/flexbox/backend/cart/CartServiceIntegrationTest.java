@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Import(TestcontainersConfiguration.class)
@@ -118,5 +119,24 @@ class CartServiceIntegrationTest {
 
         CartItem updated = cartItemRepository.findById(item.getId()).orElseThrow();
         assertThat(updated.getQuantity()).isEqualTo(7);
+    }
+
+    @Test
+    void addItem_exceedingAvailableStock_throwsInsufficientStockException() {
+        testBox.setAvailableUnits(3);
+
+        assertThatThrownBy(() -> cartService.addItem(testUser, testBox, 5))
+                .isInstanceOf(InsufficientStockException.class)
+                .hasMessageContaining("3");
+    }
+
+    @Test
+    void addItem_calledTwiceExceedingStockOnSecondCall_throwsInsufficientStockException() {
+        testBox.setAvailableUnits(4);
+
+        cartService.addItem(testUser, testBox, 3);
+
+        assertThatThrownBy(() -> cartService.addItem(testUser, testBox, 2))
+                .isInstanceOf(InsufficientStockException.class);
     }
 }

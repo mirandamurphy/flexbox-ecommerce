@@ -42,6 +42,18 @@ public class CartService {
     public CartItem addItem(User user, SubscriptionBox subscriptionBox, int quantity) {
         Cart cart = getOrCreateActiveCart(user);
 
+        int existingQuantity = cartItemRepository.findByCartAndSubscriptionBox(cart, subscriptionBox)
+                .map(CartItem::getQuantity)
+                .orElse(0);
+        int requestedTotal = existingQuantity + quantity;
+
+        Integer availableUnits = subscriptionBox.getAvailableUnits();
+        if (availableUnits != null && requestedTotal > availableUnits) {
+            throw new InsufficientStockException(
+                    "Only " + availableUnits + " unit(s) available for " + subscriptionBox.getName()
+                            + ", requested " + requestedTotal + " total");
+        }
+
         BigDecimal currentPrice = priceRepository.findCurrentPrice(subscriptionBox.getId(), OffsetDateTime.now())
                 .map(SubscriptionBoxPrice::getAmount)
                 .orElseThrow(() -> new IllegalStateException(
