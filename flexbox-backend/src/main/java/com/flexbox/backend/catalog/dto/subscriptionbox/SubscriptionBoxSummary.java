@@ -1,10 +1,8 @@
 package com.flexbox.backend.catalog.dto.subscriptionbox;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexbox.backend.catalog.entity.SubscriptionBox;
 import com.flexbox.backend.catalog.entity.SubscriptionBoxPrice;
 
-import java.util.List;
 
 // GET subscription-boxes (one box)
 public record SubscriptionBoxSummary(
@@ -20,4 +18,5 @@ public record SubscriptionBoxSummary(
                 SubscriptionBoxPriceSummary.from(price));
 
 
+    }
 }

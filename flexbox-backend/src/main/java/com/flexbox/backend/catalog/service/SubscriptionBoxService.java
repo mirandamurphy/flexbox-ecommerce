@@ -1,21 +1,24 @@
 package com.flexbox.backend.catalog.service;
 
-import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxDetail;
 import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxSummary;
+import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
+import com.flexbox.backend.catalog.repository.SubscriptionBoxPriceRepository;
 import com.flexbox.backend.catalog.repository.SubscriptionBoxRepository;
 import com.flexbox.backend.catalog.response.SubscriptionBoxListResponse;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-class SubscriptionBoxService {
+public class SubscriptionBoxService {
 
     private final SubscriptionBoxRepository subscriptionBoxRepository;
+    private final SubscriptionBoxPriceRepository subscriptionBoxPriceRepository;
 
-    SubscriptionBoxService(SubscriptionBoxRepository subscriptionBoxRepository) {
+    SubscriptionBoxService(SubscriptionBoxRepository subscriptionBoxRepository, SubscriptionBoxPriceRepository subscriptionBoxPriceRepository) {
         this.subscriptionBoxRepository = subscriptionBoxRepository;
+        this.subscriptionBoxPriceRepository = subscriptionBoxPriceRepository;
     }
 
     public SubscriptionBoxListResponse getAllSubscriptionBoxes() {
@@ -23,8 +26,11 @@ class SubscriptionBoxService {
                 .stream()
                 .map(box -> SubscriptionBoxSummary.from(
                         box,
-                        )
+                                subscriptionBoxPriceRepository
+                                        .findActivePriceBySubscriptionBoxId(box.getId(), OffsetDateTime.now())
+                                        .orElseThrow(() -> new SubscriptionBoxPriceNotFoundException("Active price not found for box " + box.getId()))
+                        ))
                 .toList();
-        return new SubscriptionBoxSummary(subscriptionBoxes);
+        return new SubscriptionBoxListResponse(subscriptionBoxes);
     }
 }
