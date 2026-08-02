@@ -1,5 +1,6 @@
 package com.flexbox.backend.subscription;
 
+import com.flexbox.backend.catalog.SubscriptionBox;
 import com.flexbox.backend.user.User;
 import com.flexbox.backend.address.Address;
 import jakarta.persistence.*;

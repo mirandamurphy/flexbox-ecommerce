@@ -1,5 +1,6 @@
 package com.flexbox.backend.payment;
 
+import com.flexbox.backend.order.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
