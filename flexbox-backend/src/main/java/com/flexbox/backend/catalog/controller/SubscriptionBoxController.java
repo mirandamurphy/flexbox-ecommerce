@@ -1,11 +1,12 @@
 package com.flexbox.backend.catalog.controller;
 
-import com.flexbox.backend.catalog.entity.SubscriptionBox;
+import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxDetail;
 import com.flexbox.backend.catalog.response.SubscriptionBoxListResponse;
 import com.flexbox.backend.catalog.service.SubscriptionBoxService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -22,6 +23,13 @@ public class SubscriptionBoxController {
     public ResponseEntity<SubscriptionBoxListResponse> getAllSubscriptionBoxes() {
         var subscriptionBoxes = subscriptionBoxService.getAllSubscriptionBoxes();
         return ResponseEntity.ok(subscriptionBoxes);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SubscriptionBoxDetail> getSubscriptionBoxById(
+            @PathVariable Long id) {
+        var subscriptionBox = subscriptionBoxService.getSubscriptionBoxById(id);
+        return ResponseEntity.ok(subscriptionBox);
     }
 
 

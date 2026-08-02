@@ -1,5 +1,6 @@
 package com.flexbox.backend.catalog.dto.subscriptionbox;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexbox.backend.catalog.entity.SubscriptionBox;
 import com.flexbox.backend.catalog.entity.SubscriptionBoxPrice;
 import com.flexbox.backend.catalog.entity.SubscriptionBoxProduct;
@@ -12,8 +13,8 @@ public record SubscriptionBoxDetail(
         Long id,
         String name,
         String description,
-        SubscriptionBoxPriceSummary price,
-        List<SubscriptionBoxProductSummary> products
+        @JsonProperty("price") SubscriptionBoxPriceSummary price,
+        @JsonProperty("products") List<SubscriptionBoxProductSummary> products
 ) {
 
     public static SubscriptionBoxDetail from (SubscriptionBox subscriptionBox,
