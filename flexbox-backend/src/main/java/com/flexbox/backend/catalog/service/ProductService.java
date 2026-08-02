@@ -1,14 +1,15 @@
 package com.flexbox.backend.catalog.service;
 
+import com.flexbox.backend.catalog.dto.category.CategorySummary;
 import com.flexbox.backend.catalog.dto.product.ProductDetail;
+import com.flexbox.backend.catalog.dto.product.ProductSummary;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.repository.ProductRepository;
 import com.flexbox.backend.catalog.response.ProductListResponse;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -17,13 +18,22 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @Transactional(readOnly = true)
     public ProductListResponse getAllProducts() {
+        var products = productRepository.findAll()
+                .stream()
+                .map(product -> ProductSummary.from(product, CategorySummary.from(product.getCategory())))
+                .toList();
+        return new ProductListResponse(products);
 
     }
+
+    @Transactional(readOnly = true)
     public ProductDetail getProductById(Long id) {
-        return productRepository.findById(id)
-                .map()
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        var product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with ID: " + id));
+        return ProductDetail.from(product, CategorySummary.from(product.getCategory()));
+
     }
 
 

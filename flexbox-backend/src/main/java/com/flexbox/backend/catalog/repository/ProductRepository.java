@@ -3,6 +3,7 @@ package com.flexbox.backend.catalog.repository;
 import com.flexbox.backend.catalog.entity.Product;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
@@ -11,8 +12,8 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // GET /products/{id}
-    //Optional<Product> findById(Long id);
+    @EntityGraph(attributePaths = "category")
+    Optional<Product> findById(Long id);
 
     // GET /products
     //Page<Product> findAll(Pageable pageable); // pagination + sort
