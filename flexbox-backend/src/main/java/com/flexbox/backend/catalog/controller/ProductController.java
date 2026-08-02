@@ -1,11 +1,10 @@
-package com.flexbox.backend.catalog;
+package com.flexbox.backend.catalog.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.flexbox.backend.catalog.dto.product.ProductDetail;
+import com.flexbox.backend.catalog.exception.ProductNotFoundException;
+import com.flexbox.backend.catalog.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -18,7 +17,7 @@ class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDetail> getProductById(@PathVariable Long id) {
         var product = productRepository.findById(id) // TODO: moving to Service class
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
         return ResponseEntity.ok(product);

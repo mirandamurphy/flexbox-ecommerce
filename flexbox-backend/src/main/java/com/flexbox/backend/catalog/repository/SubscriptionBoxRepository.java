@@ -1,5 +1,6 @@
-package com.flexbox.backend.catalog;
+package com.flexbox.backend.catalog.repository;
 
+import com.flexbox.backend.catalog.entity.SubscriptionBox;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
