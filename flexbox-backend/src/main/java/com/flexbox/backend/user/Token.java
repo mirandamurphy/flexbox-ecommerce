@@ -26,7 +26,7 @@ public class Token {
     private String tokenValue;
 
     @Column(name = "type", columnDefinition = "token_type not null")
-    private Object type;
+    private TokenType type;
 
     @ColumnDefault("false")
     @Column(name = "is_revoked", nullable = false)

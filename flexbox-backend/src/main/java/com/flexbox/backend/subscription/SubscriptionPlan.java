@@ -61,7 +61,7 @@ public class SubscriptionPlan {
     private OffsetDateTime updatedAt;
 
     @Column(name = "status", columnDefinition = "subscription_plan_status")
-    private Object status;
+    private SubscriptionPlanStatus status;
 
 
 }

@@ -20,7 +20,7 @@ public class Role {
     private Long id;
 
     @Column(name = "name", columnDefinition = "role_name")
-    private Object name;
+    private RoleName name;
 
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;

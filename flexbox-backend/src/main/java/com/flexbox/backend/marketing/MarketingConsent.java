@@ -22,7 +22,7 @@ public class MarketingConsent {
     private User user;
 
     @Column(name = "action", columnDefinition = "marketing_consent_action")
-    private Object action;
+    private MarketingConsentAction action;
 
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
