@@ -52,9 +52,14 @@ public class CheckoutService {
             throw new IllegalStateException("Cannot checkout an empty cart");
         }
 
-        BigDecimal total = cartItems.stream()
-                .map(item -> item.getUnitPriceSnapshot().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<LineItemData> lineItems = cartItems.stream()
+                .map(item -> new LineItemData(
+                        item.getSubscriptionBox().getName(),
+                        item.getUnitPriceSnapshot(),
+                        item.getQuantity()))
+                .toList();
+
+        BigDecimal total = sumTotal(lineItems);
 
         Order order = new Order();
         order.setUser(user);
@@ -75,6 +80,43 @@ public class CheckoutService {
             orderItemRepository.save(orderItem);
         }
 
+        return buildPaymentAndSession(user, order, total, lineItems);
+    }
+
+    /**
+     * Starts a new Stripe Checkout Session for an order whose previous session
+     * expired or failed, without making the customer rebuild their cart.
+     * Reuses the original order and its line items.
+     */
+    public CheckoutSession retryCheckout(Order order) throws StripeException {
+        if (order.getOrderStatus() != OrderStatus.CANCELLED) {
+            throw new IllegalStateException(
+                    "Only cancelled orders can be retried, current status: " + order.getOrderStatus());
+        }
+
+        List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+        if (orderItems.isEmpty()) {
+            throw new IllegalStateException("Order " + order.getId() + " has no items to retry");
+        }
+
+        List<LineItemData> lineItems = orderItems.stream()
+                .map(item -> new LineItemData(
+                        item.getSubscriptionBoxNameSnapshot(),
+                        item.getPurchasePriceSnapshot(),
+                        item.getQuantity()))
+                .toList();
+
+        order.setOrderStatus(OrderStatus.PENDING);
+        order.setUpdatedAt(OffsetDateTime.now());
+        order = orderRepository.save(order);
+
+        BigDecimal total = sumTotal(lineItems);
+
+        return buildPaymentAndSession(order.getUser(), order, total, lineItems);
+    }
+
+    private CheckoutSession buildPaymentAndSession(User user, Order order, BigDecimal total,
+                                                     List<LineItemData> lineItems) throws StripeException {
         Payment payment = new Payment();
         payment.setOrder(order);
         payment.setAmount(total);
@@ -82,7 +124,7 @@ public class CheckoutService {
         payment.setStatus(PaymentStatus.PENDING);
         payment = paymentRepository.save(payment);
 
-        Session stripeSession = createStripeSession(cartItems, order.getId());
+        Session stripeSession = createStripeSession(lineItems, order.getId());
 
         CheckoutSession checkoutSession = new CheckoutSession();
         checkoutSession.setUser(user);
@@ -101,26 +143,32 @@ public class CheckoutService {
         return checkoutSessionRepository.save(checkoutSession);
     }
 
-    private Session createStripeSession(List<CartItem> cartItems, Long orderId) throws StripeException {
+    private BigDecimal sumTotal(List<LineItemData> lineItems) {
+        return lineItems.stream()
+                .map(item -> item.unitPrice().multiply(BigDecimal.valueOf(item.quantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private Session createStripeSession(List<LineItemData> lineItems, Long orderId) throws StripeException {
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(successUrl + "?order_id=" + orderId)
                 .setCancelUrl(cancelUrl + "?order_id=" + orderId);
 
-        for (CartItem item : cartItems) {
-            long unitAmountCents = item.getUnitPriceSnapshot()
+        for (LineItemData item : lineItems) {
+            long unitAmountCents = item.unitPrice()
                     .multiply(BigDecimal.valueOf(100))
                     .longValueExact();
 
             SessionCreateParams.LineItem lineItem = SessionCreateParams.LineItem.builder()
-                    .setQuantity((long) item.getQuantity())
+                    .setQuantity((long) item.quantity())
                     .setPriceData(
                             SessionCreateParams.LineItem.PriceData.builder()
                                     .setCurrency("cad")
                                     .setUnitAmount(unitAmountCents)
                                     .setProductData(
                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                    .setName(item.getSubscriptionBox().getName())
+                                                    .setName(item.name())
                                                     .build())
                                     .build())
                     .build();
@@ -129,5 +177,8 @@ public class CheckoutService {
         }
 
         return Session.create(paramsBuilder.build());
+    }
+
+    private record LineItemData(String name, BigDecimal unitPrice, int quantity) {
     }
 }
