@@ -22,7 +22,7 @@ public class ProductService {
     }
     public ProductDetail getProductById(Long id) {
         return productRepository.findById(id)
-                .map(ProductDetail::from)
+                .map()
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     }
 
