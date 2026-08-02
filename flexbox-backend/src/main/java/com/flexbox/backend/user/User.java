@@ -17,35 +17,37 @@ import java.time.OffsetDateTime;
                 columnNames = {"email"})})
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long id;
 
     @Column(name = "stripe_customer_id", length = Integer.MAX_VALUE)
     private String stripeCustomerId;
 
-    @Column(name = "email", length = Integer.MAX_VALUE)
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Column(name = "password_hash", length = Integer.MAX_VALUE)
+    @Column(name = "password_hash", nullable = false, length = Integer.MAX_VALUE)
     private String passwordHash;
 
-    @Column(name = "first_name", length = Integer.MAX_VALUE)
+    @Column(name = "first_name", nullable = false, length = Integer.MAX_VALUE)
     private String firstName;
 
-    @Column(name = "last_name", length = Integer.MAX_VALUE)
+    @Column(name = "last_name", nullable = false, length = Integer.MAX_VALUE)
     private String lastName;
 
-    @Column(name = "phone_number", length = 15)
+    @Column(name = "phone_number", nullable = false, length = 15)
     private String phoneNumber;
 
     @ColumnDefault("false")
-    @Column(name = "is_enabled")
+    @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled;
 
-    @Column(name = "created_at")
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
 

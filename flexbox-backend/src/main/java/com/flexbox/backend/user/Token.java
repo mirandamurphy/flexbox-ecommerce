@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -16,30 +14,30 @@ import java.time.OffsetDateTime;
         columnNames = {"token_value"})})
 public class Token {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "token_value", nullable = false, length = Integer.MAX_VALUE)
     private String tokenValue;
 
-    @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "token_type not null", nullable = false)
-    private TokenType type;
-
     @ColumnDefault("false")
     @Column(name = "is_revoked", nullable = false)
     private Boolean isRevoked;
 
-    @Column(name = "created_at")
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "expired_at")
     private OffsetDateTime expiredAt;
+
+    @Column(name = "type", columnDefinition = "token_type not null")
+    private Object type;
 
 
 }

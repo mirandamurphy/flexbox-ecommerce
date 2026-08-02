@@ -1,12 +1,9 @@
 package com.flexbox.backend.payment;
 
-import com.flexbox.backend.order.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -15,15 +12,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "payment", schema = "public", uniqueConstraints = {@UniqueConstraint(name = "payment_stripe_payment_intent_id_key",
-        columnNames = {"stripe_payment_intent_id"})})
+@Table(name = "payment", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(name = "payment_stripe_payment_intent_id_key",
+                columnNames = {"stripe_payment_intent_id"}),
+        @UniqueConstraint(name = "idempotency_key_key",
+                columnNames = {"idempotency_key"})})
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Column(name = "stripe_payment_intent_id", length = Integer.MAX_VALUE)
@@ -32,20 +33,25 @@ public class Payment {
     @Column(name = "idempotency_key")
     private UUID idempotencyKey;
 
-    @Column(name = "amount", precision = 7, scale = 2)
+    @Column(name = "amount", nullable = false, precision = 7, scale = 2)
     private BigDecimal amount;
 
     @ColumnDefault("'CAD'")
-    @Column(name = "currency", length = 3)
+    @Column(name = "currency", nullable = false, length = 3)
     private String currency;
 
     @Column(name = "paid_at")
     private OffsetDateTime paidAt;
 
-    @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Column(columnDefinition = "payment_status")
-    private PaymentStatus status;
+    @Column(name = "status", columnDefinition = "payment_status not null")
+    private Object status;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
+
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
+    private OffsetDateTime createdAt;
 
 
 }

@@ -11,10 +11,11 @@ import lombok.Setter;
         columnNames = {"name"})})
 public class Category {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id", nullable = false)
     private Long id;
 
-    @Column(name = "name", length = Integer.MAX_VALUE)
+    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
     @Column(name = "description", length = Integer.MAX_VALUE)

@@ -15,27 +15,28 @@ import java.time.OffsetDateTime;
         columnNames = {"stripe_price_id"})})
 public class SubscriptionBoxPrice {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subscription_box_price_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subscription_box_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "subscription_box_id", nullable = false)
     private SubscriptionBox subscriptionBox;
 
-    @Column(name = "amount", precision = 5, scale = 2)
+    @Column(name = "amount", nullable = false, precision = 5, scale = 2)
     private BigDecimal amount;
 
     @ColumnDefault("'CAD'")
-    @Column(name = "currency", length = 3)
+    @Column(name = "currency", nullable = false, length = 3)
     private String currency;
 
-    @Column(name = "starts_at")
+    @Column(name = "starts_at", nullable = false)
     private OffsetDateTime startsAt;
 
     @Column(name = "ends_at")
     private OffsetDateTime endsAt;
 
-    @Column(name = "stripe_price_id", length = Integer.MAX_VALUE)
+    @Column(name = "stripe_price_id", nullable = false, length = Integer.MAX_VALUE)
     private String stripePriceId;
 
 

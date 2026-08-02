@@ -3,31 +3,38 @@ package com.flexbox.backend.catalog;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "product_inventory", schema = "public")
+@Table(name = "product_inventory", schema = "public", uniqueConstraints = {@UniqueConstraint(name = "product_inventory_product_id_key",
+        columnNames = {"product_id"})})
 public class ProductInventory {
     @Id
-    @Column(name = "product_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "inventory_id", nullable = false)
     private Long id;
 
-    @MapsId
+    @Column(name = "in_stock", nullable = false)
+    private Integer inStock;
+
+    @ColumnDefault("0")
+    @Column(name = "reserved", nullable = false)
+    private Integer reserved;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "in_stock")
-    private Integer inStock;
-
-    @Column(name = "reserved")
-    private Integer reserved;
-
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
+    private OffsetDateTime createdAt;
 
 
 }

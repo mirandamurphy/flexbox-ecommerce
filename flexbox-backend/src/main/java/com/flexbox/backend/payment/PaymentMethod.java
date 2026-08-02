@@ -15,19 +15,16 @@ import java.time.OffsetDateTime;
         columnNames = {"stripe_payment_method_id"})})
 public class PaymentMethod {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "payment_method_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "stripe_payment_method_id", length = Integer.MAX_VALUE)
+    @Column(name = "stripe_payment_method_id", nullable = false, length = Integer.MAX_VALUE)
     private String stripePaymentMethodId;
-
-    @ColumnDefault("'card'")
-    @Column(name = "type", length = Integer.MAX_VALUE)
-    private String type;
 
     @Column(name = "last_4_digits", length = 4)
     private String last4Digits;
@@ -38,14 +35,19 @@ public class PaymentMethod {
     @Column(name = "expiration_year")
     private Integer expirationYear;
 
-    @Column(name = "is_default")
+    @ColumnDefault("true")
+    @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
 
-    @Column(name = "created_at")
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    @Column(name = "type", columnDefinition = "payment_method_type not null")
+    private Object type;
 
 
 }

@@ -1,11 +1,9 @@
 package com.flexbox.backend.marketing;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.OffsetDateTime;
 
@@ -15,6 +13,7 @@ import java.time.OffsetDateTime;
 @Table(name = "newsletter", schema = "public")
 public class Newsletter {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "newsletter_id", nullable = false)
     private Long id;
 
@@ -27,11 +26,15 @@ public class Newsletter {
     @Column(name = "html_file", length = Integer.MAX_VALUE)
     private String htmlFile;
 
-    @Column(name = "type", length = Integer.MAX_VALUE)
-    private String type;
+    @ColumnDefault("now()")
+    @Column(name = "created_at", nullable = false)
+    private OffsetDateTime createdAt;
 
-    @Column(name = "created_date")
-    private OffsetDateTime createdDate;
+    @Column(name = "type", columnDefinition = "newsletter_type not null")
+    private Object type;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
 
 
 }
