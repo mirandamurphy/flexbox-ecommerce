@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -30,8 +32,10 @@ public class Newsletter {
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "type", columnDefinition = "newsletter_type not null")
-    private Object type;
+    private NewsletterType type;
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;

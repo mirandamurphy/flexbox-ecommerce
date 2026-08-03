@@ -1,6 +1,8 @@
 services:
 
   backend:
+    labels:
+      org.springframework.boot.ignore: "true" # added for local dev - turn off for prod
     build:
       context: ./flexbox-backend
       dockerfile: Dockerfile

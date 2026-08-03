@@ -35,4 +35,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     void deleteProductBySkuIgnoreCase(String sku);
+
+    Long id(Long id);
 }

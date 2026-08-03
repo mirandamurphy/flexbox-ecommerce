@@ -1,0 +1,11 @@
+### Get all products
+GET http://localhost:8080/products
+
+### Get product by ID
+GET http://localhost:8080/products/4
+
+### Get all subscription boxes
+GET http://localhost:8080/subscription-boxes
+
+### Get subscription box by ID
+GET http://localhost:8080/subscription-boxes/1
