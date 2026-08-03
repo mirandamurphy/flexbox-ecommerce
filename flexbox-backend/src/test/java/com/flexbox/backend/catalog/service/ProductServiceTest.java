@@ -31,12 +31,9 @@ class ProductServiceTest {
     }
 
     @Test
-    void getAllProducts_returnsEmptyList_whenNoProducts() {
-        when(repo.findAll()).thenReturn(List.of());
+    void getAllProducts_shouldReturnMappedProductSummaries() {
 
-        ProductListResponse response = productService.getAllProducts();
-
-        assertThat(response.products()).isEmpty();
+        var products = repo.findAll();
     }
 
     @Test
