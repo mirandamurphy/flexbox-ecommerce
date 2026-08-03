@@ -1,4 +1,4 @@
-package com.flexbox.backend.catalog.entity;
+package com.flexbox.backend.catalog.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

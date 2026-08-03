@@ -2,7 +2,7 @@ package com.flexbox.backend.catalog.service;
 
 import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxDetail;
 import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxSummary;
-import com.flexbox.backend.catalog.entity.SubscriptionBoxProduct;
+import com.flexbox.backend.catalog.model.SubscriptionBoxProduct;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
 import com.flexbox.backend.catalog.repository.SubscriptionBoxPriceRepository;

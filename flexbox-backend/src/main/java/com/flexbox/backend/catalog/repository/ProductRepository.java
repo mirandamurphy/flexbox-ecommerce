@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.repository;
 
-import com.flexbox.backend.catalog.entity.Product;
+import com.flexbox.backend.catalog.model.Product;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -12,11 +12,10 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+
     @EntityGraph(attributePaths = "category")
     Optional<Product> findById(Long id);
 
-    // GET /products
-    //Page<Product> findAll(Pageable pageable); // pagination + sort
 
     // GET /products?name=
     List<Product> findByNameIgnoreCase(String name);
@@ -36,5 +35,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     void deleteProductBySkuIgnoreCase(String sku);
 
-    Long id(Long id);
 }

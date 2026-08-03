@@ -2,8 +2,7 @@ package com.flexbox.backend.catalog.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexbox.backend.catalog.dto.category.CategorySummary;
-import com.flexbox.backend.catalog.entity.Category;
-import com.flexbox.backend.catalog.entity.Product;
+import com.flexbox.backend.catalog.model.Product;
 
 // GET products/{id}
 public record ProductDetail(

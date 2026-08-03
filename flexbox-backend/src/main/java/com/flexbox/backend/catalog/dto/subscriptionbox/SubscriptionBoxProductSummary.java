@@ -1,7 +1,7 @@
 package com.flexbox.backend.catalog.dto.subscriptionbox;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.flexbox.backend.catalog.entity.SubscriptionBoxProduct;
+import com.flexbox.backend.catalog.model.SubscriptionBoxProduct;
 
 // Used to get product details for the subscription box
 public record SubscriptionBoxProductSummary(

@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.repository;
 
-import com.flexbox.backend.catalog.entity.SubscriptionBox;
+import com.flexbox.backend.catalog.model.SubscriptionBox;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

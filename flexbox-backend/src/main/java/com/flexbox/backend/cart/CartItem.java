@@ -1,6 +1,6 @@
 package com.flexbox.backend.cart;
 
-import com.flexbox.backend.catalog.entity.SubscriptionBox;
+import com.flexbox.backend.catalog.model.SubscriptionBox;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

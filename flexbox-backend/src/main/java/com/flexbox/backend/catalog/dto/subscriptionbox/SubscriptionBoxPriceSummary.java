@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.dto.subscriptionbox;
 
-import com.flexbox.backend.catalog.entity.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
 
 import java.math.BigDecimal;
 

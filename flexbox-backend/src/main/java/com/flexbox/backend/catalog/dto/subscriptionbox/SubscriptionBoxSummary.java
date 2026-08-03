@@ -1,7 +1,7 @@
 package com.flexbox.backend.catalog.dto.subscriptionbox;
 
-import com.flexbox.backend.catalog.entity.SubscriptionBox;
-import com.flexbox.backend.catalog.entity.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.model.SubscriptionBox;
+import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
 
 
 // GET subscription-boxes (one box)

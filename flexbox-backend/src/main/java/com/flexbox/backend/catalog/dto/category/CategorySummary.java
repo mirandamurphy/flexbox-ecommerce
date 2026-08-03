@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.dto.category;
 
-import com.flexbox.backend.catalog.entity.Category;
+import com.flexbox.backend.catalog.model.Category;
 
 public record CategorySummary(
         Long id,
