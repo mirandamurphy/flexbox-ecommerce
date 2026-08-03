@@ -16,10 +16,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// TODO: Add flyway
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-
 @Import (TestcontainersConfiguration.class)
 class ProductRepositoryTest {
 
