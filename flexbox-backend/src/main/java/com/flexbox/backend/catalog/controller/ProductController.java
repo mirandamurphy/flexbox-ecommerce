@@ -1,8 +1,6 @@
 package com.flexbox.backend.catalog.controller;
 
 import com.flexbox.backend.catalog.dto.product.ProductDetail;
-import com.flexbox.backend.catalog.exception.ProductNotFoundException;
-import com.flexbox.backend.catalog.repository.ProductRepository;
 import com.flexbox.backend.catalog.response.ProductListResponse;
 import com.flexbox.backend.catalog.service.ProductService;
 import org.springframework.http.ResponseEntity;
