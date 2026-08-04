@@ -34,8 +34,6 @@ class ProductServiceTest {
     private Product product1;
     private Product product2;
 
-    private Category category;
-
     private static final OffsetDateTime CURRENT_TIME = OffsetDateTime.of(
             2026, 8, 2, 23, 38, 39, 657_650_000, ZoneOffset.UTC
     );
@@ -45,7 +43,7 @@ class ProductServiceTest {
     void setup() {
 
         // Product Category
-        category = new Category();
+        Category category = new Category();
         category.setId(1L);
         category.setName("Protein");
 
@@ -59,8 +57,8 @@ class ProductServiceTest {
         product1.setDescription("Peanut butter protein powder pack with 34g of protein");
         product1.setCostPerUnit(BigDecimal.valueOf(0.95));
         product1.setIsActive(true);
-        product1.setCreatedAt(CURRENT_TIME.minusDays(1)); // August 1 2026
-        product1.setUpdatedAt(CURRENT_TIME.minusDays(1)); // August 1 2026
+        product1.setCreatedAt(CURRENT_TIME.minusDays(1)); // Aug 1st 2026
+        product1.setUpdatedAt(CURRENT_TIME.minusDays(1)); // Aug 1st 2026
 
         // Product 2
         product2 = new Product();
@@ -72,16 +70,13 @@ class ProductServiceTest {
         product2.setDescription("Strawberry protein powder pack with 36g of protein");
         product2.setCostPerUnit(BigDecimal.valueOf(0.99));
         product2.setIsActive(true);
-        product2.setCreatedAt(CURRENT_TIME); // August 2 2026
-        product2.setUpdatedAt(CURRENT_TIME); // August 2 2026
+        product2.setCreatedAt(CURRENT_TIME); // August 2, 2026
+        product2.setUpdatedAt(CURRENT_TIME); // August 2, 2026
 
     }
 
     @Test
     void getAllProducts_shouldReturnCollectionDTO() {
-
-        Long id1 = 1L;
-        Long id2 = 2L;
 
         when(productRepository.findAll())
                 .thenReturn(List.of(product1, product2));
