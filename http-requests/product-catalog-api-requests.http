@@ -1,11 +1,17 @@
 ### Get all products
 GET http://localhost:8080/products
 
-### Get product by ID
+### Get product by ID (product exists)
 GET http://localhost:8080/products/4
+
+### Get product by ID (product DOES NOT exist)
+GET http://localhost:8080/products/1
 
 ### Get all subscription boxes
 GET http://localhost:8080/subscription-boxes
 
-### Get subscription box by ID
-GET http://localhost:8080/subscription-boxes/1
+### Get subscription box by ID (exists)
+GET http://localhost:8080/subscription-boxes/10
+
+### Get subscription box by ID (does not exist)
+GET http://localhost:8080/subscription-boxes/10
