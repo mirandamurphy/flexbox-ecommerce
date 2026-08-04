@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/subscription-boxes")
+@RequestMapping("/api/subscription-boxes")
 public class SubscriptionBoxController {
 
     private final SubscriptionBoxService subscriptionBoxService;

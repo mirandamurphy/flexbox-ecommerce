@@ -38,7 +38,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes")
+                .uri("/api/subscription-boxes")
                 .exchange();
 
         assertThat(result)
@@ -80,7 +80,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes/1")
+                .uri("/api/subscription-boxes/1")
                 .exchange();
 
         assertThat(result)
@@ -93,8 +93,6 @@ class SubscriptionBoxControllerTest {
     @Test
     void getSubscriptionBoxById_shouldReturn404_whenBoxNotFound() {
 
-        var expected = new ClassPathResource("responses/sub-boxes/get-sub-box-with-id-not-found.json");
-
         Long id = 10L;
 
         when(subscriptionBoxService.getSubscriptionBoxById(id))
@@ -102,7 +100,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes/10")
+                .uri("/api/subscription-boxes/10")
                 .exchange();
 
         assertThat(result)
