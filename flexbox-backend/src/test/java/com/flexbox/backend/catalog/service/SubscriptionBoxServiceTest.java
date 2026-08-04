@@ -56,18 +56,22 @@ class SubscriptionBoxServiceTest {
 
     @BeforeEach
     void setup() {
+
+        // Subscription Box 1
         box1 = new SubscriptionBox();
         box1.setId(1L);
         box1.setName("Monthly Box");
         box1.setAvailableUnits(10);
         box1.setIsActive(true);
 
+        // Subscription Box 2
         box2 = new SubscriptionBox();
         box2.setId(2L);
         box2.setName("Quarterly Box");
         box2.setAvailableUnits(20);
         box2.setIsActive(true);
 
+        // Subscription Box Price 1
         price1 = new SubscriptionBoxPrice();
         price1.setId(1L);
         price1.setAmount(new BigDecimal("29.99"));
@@ -77,6 +81,7 @@ class SubscriptionBoxServiceTest {
         price1.setStripePriceId("stripe_price_123");
         price1.setSubscriptionBox(box1);
 
+        // Subscription Box Price 2
         price2 = new SubscriptionBoxPrice();
         price2.setId(2L);
         price2.setAmount(new BigDecimal("49.99"));
@@ -107,10 +112,16 @@ class SubscriptionBoxServiceTest {
         assertThat(result.subscriptionBoxes())
                 .isNotEmpty()
                 .hasSize(2);
+
+        verify(subscriptionBoxRepository).findAll();
+        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(id1, any());
+        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(id2, any());
+
+
     }
 
     @Test
-    void getAllSubscriptionBoxes_shouldThrowSubscriptionBoxPriceNotFoundException() {
+    void getAllSubscriptionBoxes_shouldThrow_SubscriptionBoxPriceNotFoundException() {
 
         when(subscriptionBoxRepository.findAll())
                 .thenReturn(List.of(box1));
@@ -132,7 +143,7 @@ class SubscriptionBoxServiceTest {
     }
 
     @Test
-    void getSubscriptionBoxById_shouldReturnDetails() {
+    void getSubscriptionBoxById_shouldReturnDetailsDTO() {
 
         Long id = 1L;
         List<SubscriptionBoxProduct> products = List.of();
@@ -157,7 +168,7 @@ class SubscriptionBoxServiceTest {
         assertThat(result.price().amount()).isEqualByComparingTo("29.99");
         assertThat(result.price().currency()).isEqualTo("CAD");
 
-        // Verification
+
         verify(subscriptionBoxRepository).findById(id);
         verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(eq(id), any(OffsetDateTime.class));
         verify(subscriptionBoxProductRepository).findAllBySubscriptionBoxId(id);
