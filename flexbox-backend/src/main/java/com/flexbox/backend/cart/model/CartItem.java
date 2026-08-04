@@ -1,10 +1,12 @@
-package com.flexbox.backend.cart;
+package com.flexbox.backend.cart.model;
 
 import com.flexbox.backend.catalog.model.SubscriptionBox;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -33,11 +35,13 @@ public class CartItem {
     @Column(name = "unit_price_snapshot", nullable = false, precision = 5, scale = 2)
     private BigDecimal unitPriceSnapshot;
 
+    @Generated(event = EventType.INSERT)
     @ColumnDefault("now()")
-    @Column(name = "added_at", nullable = false)
+    @Column(name = "added_at", insertable = false, updatable = false)
     private OffsetDateTime addedAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 
 

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
 import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
@@ -35,8 +37,9 @@ public class WebhookEvent {
     @Column(name = "is_processed", nullable = false)
     private Boolean isProcessed;
 
+    @Generated(event = EventType.INSERT)
     @ColumnDefault("now()")
-    @Column(name = "received_at", nullable = false)
+    @Column(name = "received_at", insertable = false, updatable = false)
     private OffsetDateTime receivedAt;
 
     @Column(name = "processed_at")

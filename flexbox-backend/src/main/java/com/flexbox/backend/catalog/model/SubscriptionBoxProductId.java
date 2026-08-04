@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Getter
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Embeddable
 public class SubscriptionBoxProductId implements Serializable {
+    @Serial
     private static final long serialVersionUID = -8281176918313804662L;
     @Column(name = "subscription_box_id", nullable = false)
     private Long subscriptionBoxId;

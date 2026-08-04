@@ -210,5 +210,9 @@ INSERT INTO public.subscription_box_product (subscription_box_id, product_id, qu
 INSERT INTO public.subscription_box_product (subscription_box_id, product_id, quantity) VALUES (4, 49, 1);
 INSERT INTO public.subscription_box_product (subscription_box_id, product_id, quantity) VALUES (4, 66, 1);
 
-
-
+-- Sync PK sequences after inserting rows with explicit IDs
+SELECT setval('category_category_id_seq', (SELECT MAX(category_id) FROM public.category));
+SELECT setval('product_product_id_seq', (SELECT MAX(product_id) FROM public.product));
+SELECT setval('product_inventory_inventory_id_seq', (SELECT MAX(inventory_id) FROM public.product_inventory));
+SELECT setval('subscription_box_subscription_box_id_seq', (SELECT MAX(subscription_box_id) FROM public.subscription_box));
+SELECT setval('subscription_box_price_subscription_box_price_id_seq', (SELECT MAX(subscription_box_price_id) FROM public.subscription_box_price));

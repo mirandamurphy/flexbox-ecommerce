@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -41,11 +43,13 @@ public class Order {
     @Column(name = "total_amount", nullable = false, precision = 7, scale = 2)
     private BigDecimal totalAmount;
 
+    @Generated(event = EventType.INSERT)
     @ColumnDefault("now()")
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "order_date", insertable = false, updatable = false)
     private OffsetDateTime orderDate;
 
-    @Column(name = "updated_at", nullable = false)
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)

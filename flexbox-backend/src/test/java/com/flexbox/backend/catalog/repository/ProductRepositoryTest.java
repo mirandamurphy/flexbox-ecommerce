@@ -33,6 +33,7 @@ class ProductRepositoryTest {
         categoryRepository.save(category);
 
         var product = new Product();
+        product.setSku("PP-CP-001");
         product.setBrand("ProteinPowders");
         product.setName("Caramel Protein Powder");
         product.setDescription("Caramel flavored protein powder with 30g of protein per pack.");

@@ -13,6 +13,12 @@ public class TestcontainersConfiguration {
     @ServiceConnection
     PostgreSQLContainer postgresContainer() {
         return new PostgreSQLContainer("postgres:18")
+                .withDatabaseName("flexbox_test")
+                .withEnv("APP_DB", "flexbox_test")
+                .withEnv("DB_MIGRATION_ROLE", "flexbox_migration")
+                .withEnv("MIGRATION_DB_PASSWORD", "migration_test_password")
+                .withEnv("DB_APP_ROLE", "flexbox_app")
+                .withEnv("DB_APP_PASSWORD", "app_test_password")
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("init-scripts/01_create_roles_app.sh"),
                         "/docker-entrypoint-initdb.d/01_create_roles_app.sh"
