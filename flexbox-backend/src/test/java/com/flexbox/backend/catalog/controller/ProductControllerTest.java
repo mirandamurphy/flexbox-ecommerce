@@ -81,9 +81,6 @@ class ProductControllerTest {
     @Test
     void getProductById_shouldReturn404_whenProductNotFound() {
 
-        var expected = new ClassPathResource(
-                "responses/products/get-product-by-id-not-found-response.json");
-
         Long id = 1L;
 
         when(productService.getProductById(id))

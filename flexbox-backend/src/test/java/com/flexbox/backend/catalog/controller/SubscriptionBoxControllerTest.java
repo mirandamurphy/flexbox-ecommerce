@@ -93,8 +93,6 @@ class SubscriptionBoxControllerTest {
     @Test
     void getSubscriptionBoxById_shouldReturn404_whenBoxNotFound() {
 
-        var expected = new ClassPathResource("responses/sub-boxes/get-sub-box-with-id-not-found.json");
-
         Long id = 10L;
 
         when(subscriptionBoxService.getSubscriptionBoxById(id))
