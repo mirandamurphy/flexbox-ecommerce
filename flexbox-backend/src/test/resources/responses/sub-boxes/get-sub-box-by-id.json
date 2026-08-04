@@ -18,42 +18,6 @@
       "productName": "Protein Cookie",
       "brand": "ActiveLife",
       "quantity": 1
-    },
-    {
-      "productId": 14,
-      "productName": "Electrolyte Drink Mix",
-      "brand": "HydroBoost",
-      "quantity": 1
-    },
-    {
-      "productId": 20,
-      "productName": "Sport Deodorant",
-      "brand": "ActiveFresh",
-      "quantity": 1
-    },
-    {
-      "productId": 21,
-      "productName": "Body Wipes",
-      "brand": "RefreshGo",
-      "quantity": 1
-    },
-    {
-      "productId": 24,
-      "productName": "Performance Crew Socks",
-      "brand": "ActiveThreads",
-      "quantity": 1
-    },
-    {
-      "productId": 45,
-      "productName": "Blueberry Protein Bites",
-      "brand": "FitNaturals",
-      "quantity": 1
-    },
-    {
-      "productId": 54,
-      "productName": "Apple Cinnamon Crisps",
-      "brand": "GreenPeak",
-      "quantity": 1
     }
   ]
 }

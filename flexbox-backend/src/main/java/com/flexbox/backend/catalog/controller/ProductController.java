@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
-class ProductController {
+public class ProductController {
 
     private final ProductService productService;
 
@@ -27,7 +27,7 @@ class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDetail> getProductById(
-            @PathVariable Long id) {
+            @PathVariable("id") Long id) {
         var product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
