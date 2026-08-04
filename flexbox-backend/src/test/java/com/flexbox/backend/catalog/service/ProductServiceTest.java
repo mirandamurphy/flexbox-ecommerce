@@ -111,7 +111,6 @@ class ProductServiceTest {
         assertThat(result.category().name()).isEqualTo("Protein");
         assertThat(result.isActive()).isTrue();
 
-
         // Verify ProductService called Mock Dependency in expected way
         verify(productRepository).findById(id);
     }
@@ -120,18 +119,13 @@ class ProductServiceTest {
     void getProductById_shouldThrow_ProductNotFoundException() {
         Long id = 3L;
 
-
         when(productRepository.findById(id))
                 .thenReturn(Optional.empty());
-
 
         assertThatThrownBy(() -> productService
                 .getProductById(id))
                 .isInstanceOf(ProductNotFoundException.class)
-                        .hasMessageContaining(
-                                "Product not found with ID: 3"
-                        );
-
+                .hasMessage("Product not found with ID: " + id);
 
         verify(productRepository).findById(id);
     }

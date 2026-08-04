@@ -114,8 +114,9 @@ class SubscriptionBoxServiceTest {
                 .hasSize(2);
 
         verify(subscriptionBoxRepository).findAll();
-        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(id1, any());
-        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(id2, any());
+        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(eq(id1), any());
+        verify(subscriptionBoxPriceRepository).findActivePriceBySubscriptionBoxId(eq(id2), any());
+
 
 
     }
@@ -133,8 +134,8 @@ class SubscriptionBoxServiceTest {
 
         assertThatThrownBy(() -> subscriptionBoxService.getAllSubscriptionBoxes())
                 .isInstanceOf(SubscriptionBoxPriceNotFoundException.class)
-                .hasMessageContaining(
-                        "Active price not found for box ID: 1"
+                .hasMessage(
+                        "Active price not found for box ID: " + box1.getId()
                 );
 
         verify(subscriptionBoxRepository)
