@@ -3,6 +3,7 @@ package com.flexbox.backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,13 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
-            "mySecretKeyForFlexboxSecurityThatShouldBeChangedLater12345678901234567890"
-                    .getBytes(StandardCharsets.UTF_8)
-    );
+    private final SecretKey secretKey;
+
+    public JwtService(@Value("${jwt.secret}") String jwtSecret) {
+        this.secretKey = Keys.hmacShaKeyFor(
+                jwtSecret.getBytes(StandardCharsets.UTF_8)
+        );
+    }
 
     public String generateToken(UserDetails userDetails) {
 
@@ -29,17 +33,15 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(SECRET_KEY)
+                .signWith(secretKey)
                 .compact();
     }
-
 
     public String extractUsername(String token) {
 
         return extractAllClaims(token)
                 .getSubject();
     }
-
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
 
@@ -49,7 +51,6 @@ public class JwtService {
                 && !isTokenExpired(token);
     }
 
-
     private boolean isTokenExpired(String token) {
 
         return extractAllClaims(token)
@@ -57,11 +58,10 @@ public class JwtService {
                 .before(new Date());
     }
 
-
     private Claims extractAllClaims(String token) {
 
         return Jwts.parser()
-                .verifyWith(SECRET_KEY)
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
