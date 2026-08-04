@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Import(TestcontainersConfiguration.class)
 @Transactional
-class SubscriptionBoxPriceRepositoryTest {
+class SubscriptionBoxPriceRepositoryIntegrationTest {
 
     @Autowired
     SubscriptionBoxPriceRepository repo;

@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Import(TestcontainersConfiguration.class)
 @Transactional
-class ProductRepositoryTest {
+class ProductRepositoryIntegrationTest {
 
     @Autowired
     private ProductRepository repo;
