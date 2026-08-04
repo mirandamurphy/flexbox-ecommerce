@@ -1,6 +1,7 @@
 package com.flexbox.backend.catalog.repository;
 
 import com.flexbox.backend.catalog.model.Product;
+import lombok.NonNull;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
