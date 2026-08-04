@@ -14,15 +14,12 @@ public class TestcontainersConfiguration {
     PostgreSQLContainer postgresContainer() {
         return new PostgreSQLContainer("postgres:18")
                 .withCopyFileToContainer(
-                        MountableFile.forClasspathResource("init-scripts/01_create_roles.sh"),
-                        "/docker-entrypoint-initdb.d/01_create_roles.sh"
+                        MountableFile.forClasspathResource("init-scripts/01_create_roles_app.sh"),
+                        "/docker-entrypoint-initdb.d/01_create_roles_app.sh"
                 )
                 .withCopyFileToContainer(
-                        MountableFile.forClasspathResource("init-scripts/02_grant_privileges.sh"),
-                        "/docker-entrypoint-init-db.d/02_grant_privileges.sh"
+                        MountableFile.forClasspathResource("init-scripts/02_grant_privileges_app.sh"),
+                        "/docker-entrypoint-initdb.d/02_grant_privileges_app.sh"
                 );
-//                .withDatabaseName("test")
-//                .withUsername("postgres")
-//                .withPassword("postgres");
     }
 }
