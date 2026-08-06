@@ -37,7 +37,7 @@ class ProductControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/products")
+                .uri("/api/products")
                 .exchange();
 
         assertThat(result)
@@ -69,7 +69,7 @@ class ProductControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/products/4")
+                .uri("/api/products/4")
                 .exchange();
 
         assertThat(result)
@@ -88,7 +88,7 @@ class ProductControllerTest {
 
         MvcTestResult testResult = mockMvcTester
                 .get()
-                .uri("/products/1")
+                .uri("/api/products/1")
                 .exchange();
 
         assertThat(testResult)
