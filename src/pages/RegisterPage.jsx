@@ -25,7 +25,7 @@ function RegisterPage() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
@@ -35,7 +35,7 @@ function RegisterPage() {
     }
 
     try {
-      register({
+      await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
@@ -43,7 +43,10 @@ function RegisterPage() {
 
       navigate("/profile");
     } catch (registrationError) {
-      setError(registrationError.message);
+      const message =
+        registrationError.response?.data?.detail ||
+        registrationError.message;
+      setError(message);
     }
   }
 
