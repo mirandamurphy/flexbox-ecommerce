@@ -2,10 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { createCheckoutSession } from "../services/checkoutService";
 
 function CheckoutPage() {
   const navigate = useNavigate();
-  const { cartItems, cartTotal, clearCart } = useCart();
+  const { currentUser } = useAuth();
+  const { cartItems, cartTotal } = useCart();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -30,7 +33,7 @@ function CheckoutPage() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
@@ -50,25 +53,18 @@ function CheckoutPage() {
 
     setIsProcessing(true);
 
-    // Mock payment processing for the frontend prototype.
-    setTimeout(() => {
-      const order = {
-        orderNumber: `FB-${Date.now()}`,
-        date: new Date().toLocaleDateString(),
-        total: cartTotal,
-        items: cartItems,
-        customerName: formData.fullName,
-      };
-
-      localStorage.setItem(
-        "latestFlexboxOrder",
-        JSON.stringify(order)
-      );
-
-      clearCart();
+    try {
+      const response = await createCheckoutSession(currentUser.id);
+      // Redirects to Stripe's hosted checkout page. The card fields
+      // above are not sent anywhere, Stripe collects real payment
+      // details on its own page, not through this form.
+      window.location.href = response.data.checkoutUrl;
+    } catch (checkoutError) {
+      const message =
+        checkoutError.response?.data?.detail || checkoutError.message;
+      setError(message);
       setIsProcessing(false);
-      navigate("/order-confirmation");
-    }, 1200);
+    }
   }
 
   if (cartItems.length === 0) {
