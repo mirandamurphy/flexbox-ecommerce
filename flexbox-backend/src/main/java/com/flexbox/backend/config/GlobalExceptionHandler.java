@@ -1,5 +1,6 @@
 package com.flexbox.backend.config;
 
+import com.flexbox.backend.auth.InvalidCredentialsException;
 import com.flexbox.backend.cart.InsufficientStockException;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
@@ -69,6 +70,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         problem.setTitle("Subscription Box Price Not Found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    /*
+    Exceptions for Auth
+     */
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ProblemDetail handleInvalidCredentials(InvalidCredentialsException e) {
+        log.warn("Login failed: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,
+                e.getMessage()
+        );
+
+        problem.setTitle("Invalid Credentials");
         problem.setProperty("timestamp", Instant.now());
 
         return problem;
