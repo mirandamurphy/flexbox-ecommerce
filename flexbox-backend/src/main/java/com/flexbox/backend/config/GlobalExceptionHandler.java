@@ -1,8 +1,10 @@
 package com.flexbox.backend.config;
 
+import com.flexbox.backend.cart.InsufficientStockException;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
+import com.flexbox.backend.order.OrderNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -67,6 +69,69 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         problem.setTitle("Subscription Box Price Not Found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    /*
+    Exceptions for Cart and Checkout
+     */
+    @ExceptionHandler(InsufficientStockException.class)
+    public ProblemDetail handleInsufficientStock(InsufficientStockException e) {
+        log.warn("Insufficient stock: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                e.getMessage()
+        );
+
+        problem.setTitle("Insufficient Stock");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ProblemDetail handleOrderNotFound(OrderNotFoundException e) {
+        log.warn("Order lookup failed: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                e.getMessage()
+        );
+
+        problem.setTitle("Order Not Found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail handleIllegalArgument(IllegalArgumentException e) {
+        log.warn("Invalid request: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                e.getMessage()
+        );
+
+        problem.setTitle("Not Found");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ProblemDetail handleIllegalState(IllegalStateException e) {
+        log.warn("Invalid state for request: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                e.getMessage()
+        );
+
+        problem.setTitle("Invalid State");
         problem.setProperty("timestamp", Instant.now());
 
         return problem;

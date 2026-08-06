@@ -1,8 +1,8 @@
 package com.flexbox.backend.order;
 
-import com.flexbox.backend.cart.Cart;
-import com.flexbox.backend.cart.CartItem;
 import com.flexbox.backend.cart.CartItemRepository;
+import com.flexbox.backend.cart.model.Cart;
+import com.flexbox.backend.cart.model.CartItem;
 import com.flexbox.backend.payment.Payment;
 import com.flexbox.backend.payment.PaymentRepository;
 import com.flexbox.backend.payment.PaymentStatus;
@@ -46,7 +46,7 @@ public class CheckoutService {
         this.cancelUrl = cancelUrl;
     }
 
-    public CheckoutSession createCheckoutSession(User user, Cart cart) throws StripeException {
+    public CheckoutResult createCheckoutSession(User user, Cart cart) throws StripeException {
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
         if (cartItems.isEmpty()) {
             throw new IllegalStateException("Cannot checkout an empty cart");
@@ -65,9 +65,7 @@ public class CheckoutService {
         order.setUser(user);
         order.setCurrency("CAD");
         order.setTotalAmount(total);
-        order.setOrderStatus(OrderStatus.PENDING);
-        order.setOrderDate(OffsetDateTime.now());
-        order.setUpdatedAt(OffsetDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
         order = orderRepository.save(order);
 
         for (CartItem cartItem : cartItems) {
@@ -88,10 +86,10 @@ public class CheckoutService {
      * expired or failed, without making the customer rebuild their cart.
      * Reuses the original order and its line items.
      */
-    public CheckoutSession retryCheckout(Order order) throws StripeException {
-        if (order.getOrderStatus() != OrderStatus.CANCELLED) {
+    public CheckoutResult retryCheckout(Order order) throws StripeException {
+        if (order.getStatus() != OrderStatus.CANCELLED) {
             throw new IllegalStateException(
-                    "Only cancelled orders can be retried, current status: " + order.getOrderStatus());
+                    "Only cancelled orders can be retried, current status: " + order.getStatus());
         }
 
         List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
@@ -106,8 +104,7 @@ public class CheckoutService {
                         item.getQuantity()))
                 .toList();
 
-        order.setOrderStatus(OrderStatus.PENDING);
-        order.setUpdatedAt(OffsetDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
         order = orderRepository.save(order);
 
         BigDecimal total = sumTotal(lineItems);
@@ -115,7 +112,7 @@ public class CheckoutService {
         return buildPaymentAndSession(order.getUser(), order, total, lineItems);
     }
 
-    private CheckoutSession buildPaymentAndSession(User user, Order order, BigDecimal total,
+    private CheckoutResult buildPaymentAndSession(User user, Order order, BigDecimal total,
                                                      List<LineItemData> lineItems) throws StripeException {
         Payment payment = new Payment();
         payment.setOrder(order);
@@ -137,10 +134,9 @@ public class CheckoutService {
         checkoutSession.setCurrency("CAD");
         checkoutSession.setSuccessUrl(successUrl);
         checkoutSession.setCancelUrl(cancelUrl);
-        checkoutSession.setCreatedAt(OffsetDateTime.now());
-        checkoutSession.setUpdatedAt(OffsetDateTime.now());
 
-        return checkoutSessionRepository.save(checkoutSession);
+        checkoutSession = checkoutSessionRepository.save(checkoutSession);
+        return new CheckoutResult(checkoutSession, stripeSession.getUrl());
     }
 
     private BigDecimal sumTotal(List<LineItemData> lineItems) {
@@ -180,5 +176,8 @@ public class CheckoutService {
     }
 
     private record LineItemData(String name, BigDecimal unitPrice, int quantity) {
+    }
+
+    public record CheckoutResult(CheckoutSession checkoutSession, String checkoutUrl) {
     }
 }
