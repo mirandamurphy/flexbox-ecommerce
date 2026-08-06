@@ -51,4 +51,10 @@ Every real issue found while merging and running the four branches together as o
 | 23 | Root `README.md` was a title and nothing else. | Wrote a real one: setup, structure, API reference, known limitations. |
 | 24 | No updated architecture diagram reflecting the real changes made during reconciliation. | Built one, scoped to the checkout/order model specifically. |
 | 25 | Cart and Checkout only existed at the service layer, nothing exposed them over HTTP. | Built `CartController` and `CheckoutController`, updated the API contract on Jira to match. |
-| 26 | Frontend runs on port 5173 (Vite's real default), but the checkout success/cancel redirect URLs and the README both assumed port 3000. | Not yet fixed. |
+| 26 | Frontend runs on port 5173 (Vite's real default), but the checkout success/cancel redirect URLs and the README both assumed port 3000. | Fixed. Also found the target routes (`/checkout/success`, `/checkout/cancel`) never existed at all, redirected to the existing `/order-confirmation` and `/checkout` routes instead. |
+| 27 | `order_item` had a trigger, `trg_order_item_updated_at`, attached to it, but the table (and the matching Java entity) never had an `updated_at` column at all. Every insert into `order_item` failed with `record "new" has no field "updated_at"`, blocking checkout entirely. Found running the first real end-to-end checkout against the live Stripe API. | Removed the stray trigger, matches the table's actual design. |
+| 28 | `OrderConfirmationPage` read order data from `localStorage`, written by the old mock flow. The real flow never writes there, the order already exists server-side before Stripe redirects back. | Updated to read the order id from the URL query param Stripe redirects with, shows an honest, minimal confirmation instead of fabricated order details, since there is no order-lookup endpoint yet. |
+
+## Verified End to End
+
+Ran a real smoke test against the live backend and the live Stripe API on 2026-08-06: register → login → browse subscription boxes → add to cart → checkout. Received an actual Stripe-hosted checkout URL back. This confirms the full purchase flow works, not just that each piece compiles or passes an isolated test.
