@@ -4,15 +4,28 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.postgresql.PostgreSQLContainer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
     PostgreSQLContainer postgresContainer() {
-        return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"));
+        return new PostgreSQLContainer("postgres:18")
+                .withDatabaseName("flexbox_test")
+                .withEnv("APP_DB", "flexbox_test")
+                .withEnv("DB_MIGRATION_ROLE", "flexbox_migration")
+                .withEnv("MIGRATION_DB_PASSWORD", "migration_test_password")
+                .withEnv("DB_APP_ROLE", "flexbox_app")
+                .withEnv("DB_APP_PASSWORD", "app_test_password")
+                .withCopyFileToContainer(
+                        MountableFile.forClasspathResource("init-scripts/01_create_roles_app.sh"),
+                        "/docker-entrypoint-initdb.d/01_create_roles_app.sh"
+                )
+                .withCopyFileToContainer(
+                        MountableFile.forClasspathResource("init-scripts/02_grant_privileges_app.sh"),
+                        "/docker-entrypoint-initdb.d/02_grant_privileges_app.sh"
+                );
     }
-
 }

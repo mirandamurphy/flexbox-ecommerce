@@ -7,14 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "user_role", schema = "public", uniqueConstraints = {@UniqueConstraint(name = "user_role_user_id_key",
-        columnNames = {"user_id"})})
+@Table(name = "user_role", schema = "public")
 public class UserRole {
     @EmbeddedId
     private UserRoleId id;
 
     @MapsId("userId")
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

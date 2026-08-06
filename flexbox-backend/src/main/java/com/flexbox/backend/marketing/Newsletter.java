@@ -1,11 +1,13 @@
 package com.flexbox.backend.marketing;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -15,6 +17,7 @@ import java.time.OffsetDateTime;
 @Table(name = "newsletter", schema = "public")
 public class Newsletter {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "newsletter_id", nullable = false)
     private Long id;
 
@@ -27,11 +30,19 @@ public class Newsletter {
     @Column(name = "html_file", length = Integer.MAX_VALUE)
     private String htmlFile;
 
-    @Column(name = "type", length = Integer.MAX_VALUE)
-    private String type;
+    @Generated(event = EventType.INSERT)
+    @ColumnDefault("now()")
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private OffsetDateTime createdAt;
 
-    @Column(name = "created_date")
-    private OffsetDateTime createdDate;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "type", columnDefinition = "newsletter_type not null")
+    private NewsletterType type;
+
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private OffsetDateTime updatedAt;
 
 
 }
