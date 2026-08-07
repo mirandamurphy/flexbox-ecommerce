@@ -162,4 +162,31 @@ class WebhookServiceIntegrationTest {
         Order updatedOrder = orderRepository.findById(testOrder.getId()).orElseThrow();
         assertThat(updatedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
+
+    @Test
+    void eventThatNeverFinishedProcessing_getsRetriedNotSkipped() {
+        // Simulates a previous webhook delivery that created the WebhookEvent
+        // row but crashed before finishing, isProcessed left false. Stripe
+        // would resend the same event id, and it must actually be retried,
+        // not silently skipped just because a row with that id already exists.
+        WebhookEvent stuckEvent = new WebhookEvent();
+        stuckEvent.setStripeEventId("evt_test_stuck");
+        stuckEvent.setEventType("checkout.session.completed");
+        stuckEvent.setPayload(java.util.Map.of("raw", "{}"));
+        stuckEvent.setIsProcessed(false);
+        entityManager.persist(stuckEvent);
+        entityManager.flush();
+
+        Event event = buildEvent("evt_test_stuck", "checkout.session.completed", STRIPE_SESSION_ID, STRIPE_PAYMENT_INTENT_ID);
+
+        webhookService.handleEvent(event);
+
+        Order updatedOrder = orderRepository.findById(testOrder.getId()).orElseThrow();
+        Payment updatedPayment = paymentRepository.findById(testPayment.getId()).orElseThrow();
+        WebhookEvent updatedEvent = webhookEventRepository.findByStripeEventId("evt_test_stuck").orElseThrow();
+
+        assertThat(updatedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(updatedPayment.getStatus()).isEqualTo(PaymentStatus.SUCCEEDED);
+        assertThat(updatedEvent.getIsProcessed()).isTrue();
+    }
 }
