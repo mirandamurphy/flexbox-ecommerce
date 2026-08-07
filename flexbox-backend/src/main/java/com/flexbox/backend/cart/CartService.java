@@ -43,9 +43,9 @@ public class CartService {
     public CartItem addItem(User user, SubscriptionBox subscriptionBox, int quantity) {
         Cart cart = getOrCreateActiveCart(user);
 
-        int existingQuantity = cartItemRepository.findByCartAndSubscriptionBox(cart, subscriptionBox)
-                .map(CartItem::getQuantity)
-                .orElse(0);
+        var existingItem = cartItemRepository.findByCartAndSubscriptionBox(cart, subscriptionBox);
+
+        int existingQuantity = existingItem.map(CartItem::getQuantity).orElse(0);
         int requestedTotal = existingQuantity + quantity;
 
         Integer availableUnits = subscriptionBox.getAvailableUnits();
@@ -60,7 +60,7 @@ public class CartService {
                 .orElseThrow(() -> new IllegalStateException(
                         "No active price found for subscription box " + subscriptionBox.getId()));
 
-        return cartItemRepository.findByCartAndSubscriptionBox(cart, subscriptionBox)
+        return existingItem
                 .map(existing -> {
                     existing.setQuantity(existing.getQuantity() + quantity);
                     return cartItemRepository.save(existing);
