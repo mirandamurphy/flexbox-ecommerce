@@ -2,6 +2,7 @@ package com.flexbox.backend.config;
 
 import com.flexbox.backend.auth.InvalidCredentialsException;
 import com.flexbox.backend.cart.InsufficientStockException;
+import com.flexbox.backend.cart.InvalidQuantityException;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
@@ -96,6 +97,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /*
     Exceptions for Cart and Checkout
      */
+    @ExceptionHandler(InvalidQuantityException.class)
+    public ProblemDetail handleInvalidQuantity(InvalidQuantityException e) {
+        log.warn("Invalid quantity: {}", e.getMessage());
+
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                e.getMessage()
+        );
+
+        problem.setTitle("Invalid Quantity");
+        problem.setProperty("timestamp", Instant.now());
+
+        return problem;
+    }
+
     @ExceptionHandler(InsufficientStockException.class)
     public ProblemDetail handleInsufficientStock(InsufficientStockException e) {
         log.warn("Insufficient stock: {}", e.getMessage());

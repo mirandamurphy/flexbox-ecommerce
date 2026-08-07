@@ -80,8 +80,22 @@ public class CartService {
     }
 
     public CartItem updateQuantity(Long cartItemId, int quantity) {
+        if (quantity <= 0) {
+            throw new InvalidQuantityException(
+                    "Quantity must be greater than zero, use removeItem to delete a cart item");
+        }
+
         CartItem item = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found: " + cartItemId));
+
+        SubscriptionBox subscriptionBox = item.getSubscriptionBox();
+        Integer availableUnits = subscriptionBox.getAvailableUnits();
+        if (availableUnits != null && quantity > availableUnits) {
+            throw new InsufficientStockException(
+                    "Only " + availableUnits + " unit(s) available for " + subscriptionBox.getName()
+                            + ", requested " + quantity);
+        }
+
         item.setQuantity(quantity);
         return cartItemRepository.save(item);
     }

@@ -142,4 +142,31 @@ class CartServiceIntegrationTest {
         assertThatThrownBy(() -> cartService.addItem(testUser, testBox, 2))
                 .isInstanceOf(InsufficientStockException.class);
     }
+
+    @Test
+    void updateQuantity_toZeroOrLess_throwsInvalidQuantityException() {
+        CartItem item = cartService.addItem(testUser, testBox, 2);
+
+        assertThatThrownBy(() -> cartService.updateQuantity(item.getId(), 0))
+                .isInstanceOf(InvalidQuantityException.class);
+
+        assertThatThrownBy(() -> cartService.updateQuantity(item.getId(), -3))
+                .isInstanceOf(InvalidQuantityException.class);
+
+        CartItem unchanged = cartItemRepository.findById(item.getId()).orElseThrow();
+        assertThat(unchanged.getQuantity()).isEqualTo(2);
+    }
+
+    @Test
+    void updateQuantity_exceedingAvailableStock_throwsInsufficientStockException() {
+        testBox.setAvailableUnits(5);
+        CartItem item = cartService.addItem(testUser, testBox, 2);
+
+        assertThatThrownBy(() -> cartService.updateQuantity(item.getId(), 10))
+                .isInstanceOf(InsufficientStockException.class)
+                .hasMessageContaining("5");
+
+        CartItem unchanged = cartItemRepository.findById(item.getId()).orElseThrow();
+        assertThat(unchanged.getQuantity()).isEqualTo(2);
+    }
 }
