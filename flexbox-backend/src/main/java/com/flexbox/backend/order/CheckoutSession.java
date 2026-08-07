@@ -6,6 +6,11 @@ import com.flexbox.backend.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -21,13 +26,17 @@ public class CheckoutSession {
     @Column(name = "checkout_session_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "stripe_session_id", length = Integer.MAX_VALUE)
     private String stripeSessionId;
 
+    // Nullable: a checkout session represents either a single subscription
+    // plan purchase, or a cart-based multi-item order (subscriptionPlan is
+    // null in that case). Matches the database column, which was already
+    // nullable before this branch was merged.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_plan_id")
     private SubscriptionPlan subscriptionPlan;
@@ -35,12 +44,6 @@ public class CheckoutSession {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @Column(name = "mode", columnDefinition = "checkout_session_mode")
-    private CheckoutSessionMode mode;
-
-    @Column(name = "status", columnDefinition = "checkout_session_status")
-    private CheckoutSessionStatus status;
 
     @Column(name = "amount_subtotal", precision = 7, scale = 2)
     private BigDecimal amountSubtotal;
@@ -51,7 +54,8 @@ public class CheckoutSession {
     @Column(name = "amount_total", precision = 7, scale = 2)
     private BigDecimal amountTotal;
 
-    @Column(name = "currency", length = 3)
+    @ColumnDefault("'CAD'")
+    @Column(name = "currency", nullable = false, length = 3)
     private String currency;
 
     @Column(name = "success_url", length = Integer.MAX_VALUE)
@@ -66,11 +70,22 @@ public class CheckoutSession {
     @Column(name = "completed_at")
     private OffsetDateTime completedAt;
 
-    @Column(name = "created_at")
+    @Generated(event = EventType.INSERT)
+    @ColumnDefault("now()")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "mode", columnDefinition = "checkout_session_mode not null")
+    private CheckoutSessionMode mode;
 
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "status", columnDefinition = "checkout_session_status not null")
+    private CheckoutSessionStatus status;
 }

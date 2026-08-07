@@ -12,8 +12,11 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     public PostgreSQLContainer postgresContainer() {
+        // Keeping the simpler default-superuser setup for now, proven working
+        // against all existing tests. A more production-realistic version
+        // exists (mounting the real role-creation init scripts), worth
+        // adopting for A4 once there is time to verify it end to end.
         return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"))
                 .withUrlParam("stringtype", "unspecified");
     }
-
 }

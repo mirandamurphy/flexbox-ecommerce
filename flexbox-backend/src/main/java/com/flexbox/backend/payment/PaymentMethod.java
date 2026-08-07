@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 
@@ -19,16 +23,12 @@ public class PaymentMethod {
     @Column(name = "payment_method_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "stripe_payment_method_id", length = Integer.MAX_VALUE)
+    @Column(name = "stripe_payment_method_id", nullable = false, length = Integer.MAX_VALUE)
     private String stripePaymentMethodId;
-
-    @ColumnDefault("'card'")
-    @Column(name = "type", length = Integer.MAX_VALUE)
-    private String type;
 
     @Column(name = "last_4_digits", length = 4)
     private String last4Digits;
@@ -39,14 +39,23 @@ public class PaymentMethod {
     @Column(name = "expiration_year")
     private Integer expirationYear;
 
-    @Column(name = "is_default")
+    @ColumnDefault("true")
+    @Column(name = "is_default", nullable = false)
     private Boolean isDefault;
 
-    @Column(name = "created_at")
+    @Generated(event = EventType.INSERT)
+    @ColumnDefault("now()")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "type", columnDefinition = "payment_method_type not null")
+    private PaymentMethodType type;
 
 
 }

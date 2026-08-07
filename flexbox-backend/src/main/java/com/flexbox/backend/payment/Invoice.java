@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.generator.EventType;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -23,25 +27,33 @@ public class Invoice {
     @Column(name = "stripe_invoice_id", length = Integer.MAX_VALUE)
     private String stripeInvoiceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subscription_plan_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "subscription_plan_id", nullable = false)
     private SubscriptionPlan subscriptionPlan;
 
-    @Column(name = "amount_due", precision = 7, scale = 2)
+    @Column(name = "amount_due", nullable = false, precision = 7, scale = 2)
     private BigDecimal amountDue;
 
     @ColumnDefault("'CAD'")
     @Column(name = "currency", length = 3)
     private String currency;
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
-    private String status;
-
-    @Column(name = "created_at")
+    @Generated(event = EventType.INSERT)
+    @ColumnDefault("now()")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "paid_at")
     private OffsetDateTime paidAt;
+
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "status", columnDefinition = "invoice_status not null")
+    private InvoiceStatus status;
+
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private OffsetDateTime updatedAt;
 
 
 }
