@@ -59,7 +59,7 @@ class CheckoutServiceRetryValidationTest {
         Order order = new Order();
         order.setId(1L);
         order.setUser(new User());
-        order.setOrderStatus(OrderStatus.PENDING);
+        order.setStatus(OrderStatus.PENDING);
         order.setTotalAmount(new BigDecimal("10.00"));
 
         assertThatThrownBy(() -> checkoutService.retryCheckout(order))
@@ -74,7 +74,7 @@ class CheckoutServiceRetryValidationTest {
         Order order = new Order();
         order.setId(2L);
         order.setUser(new User());
-        order.setOrderStatus(OrderStatus.CANCELLED);
+        order.setStatus(OrderStatus.CANCELLED);
         order.setTotalAmount(new BigDecimal("10.00"));
 
         lenient().when(orderItemRepository.findByOrder(order)).thenReturn(Collections.emptyList());

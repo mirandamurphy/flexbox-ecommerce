@@ -1,8 +1,11 @@
 package com.flexbox.backend.cart;
 
-import com.flexbox.backend.catalog.SubscriptionBox;
-import com.flexbox.backend.catalog.SubscriptionBoxPrice;
-import com.flexbox.backend.catalog.SubscriptionBoxPriceRepository;
+import com.flexbox.backend.cart.model.Cart;
+import com.flexbox.backend.cart.model.CartItem;
+import com.flexbox.backend.cart.model.CartStatus;
+import com.flexbox.backend.catalog.model.SubscriptionBox;
+import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.repository.SubscriptionBoxPriceRepository;
 import com.flexbox.backend.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +36,6 @@ public class CartService {
                     Cart cart = new Cart();
                     cart.setUser(user);
                     cart.setStatus(CartStatus.ACTIVE);
-                    cart.setCreatedAt(OffsetDateTime.now());
-                    cart.setUpdatedAt(OffsetDateTime.now());
                     return cartRepository.save(cart);
                 });
     }
@@ -54,7 +55,7 @@ public class CartService {
                             + ", requested " + requestedTotal + " total");
         }
 
-        BigDecimal currentPrice = priceRepository.findCurrentPrice(subscriptionBox.getId(), OffsetDateTime.now())
+        BigDecimal currentPrice = priceRepository.findActivePriceBySubscriptionBoxId(subscriptionBox.getId(), OffsetDateTime.now())
                 .map(SubscriptionBoxPrice::getAmount)
                 .orElseThrow(() -> new IllegalStateException(
                         "No active price found for subscription box " + subscriptionBox.getId()));
@@ -62,7 +63,6 @@ public class CartService {
         return cartItemRepository.findByCartAndSubscriptionBox(cart, subscriptionBox)
                 .map(existing -> {
                     existing.setQuantity(existing.getQuantity() + quantity);
-                    existing.setUpdatedAt(OffsetDateTime.now());
                     return cartItemRepository.save(existing);
                 })
                 .orElseGet(() -> {
@@ -71,8 +71,6 @@ public class CartService {
                     item.setSubscriptionBox(subscriptionBox);
                     item.setQuantity(quantity);
                     item.setUnitPriceSnapshot(currentPrice);
-                    item.setAddedAt(OffsetDateTime.now());
-                    item.setUpdatedAt(OffsetDateTime.now());
                     return cartItemRepository.save(item);
                 });
     }
@@ -85,7 +83,6 @@ public class CartService {
         CartItem item = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new IllegalArgumentException("Cart item not found: " + cartItemId));
         item.setQuantity(quantity);
-        item.setUpdatedAt(OffsetDateTime.now());
         return cartItemRepository.save(item);
     }
 

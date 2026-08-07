@@ -1,8 +1,11 @@
 package com.flexbox.backend.cart;
 
 import com.flexbox.backend.TestcontainersConfiguration;
-import com.flexbox.backend.catalog.SubscriptionBox;
-import com.flexbox.backend.catalog.SubscriptionBoxPrice;
+import com.flexbox.backend.cart.model.Cart;
+import com.flexbox.backend.cart.model.CartItem;
+import com.flexbox.backend.cart.model.CartStatus;
+import com.flexbox.backend.catalog.model.SubscriptionBox;
+import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
 import com.flexbox.backend.user.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -44,9 +47,10 @@ class CartServiceIntegrationTest {
         testUser = new User();
         testUser.setEmail("cart-test@flexbox.ca");
         testUser.setPasswordHash("dummy-hash");
+        testUser.setFirstName("Test");
+        testUser.setLastName("User");
+        testUser.setPhoneNumber("1234567890");
         testUser.setIsEnabled(true);
-        testUser.setCreatedAt(OffsetDateTime.now());
-        testUser.setUpdatedAt(OffsetDateTime.now());
         entityManager.persist(testUser);
 
         testBox = new SubscriptionBox();
@@ -54,8 +58,6 @@ class CartServiceIntegrationTest {
         testBox.setDescription("Starter box for the test suite");
         testBox.setIsActive(true);
         testBox.setAvailableUnits(50);
-        testBox.setCreatedAt(OffsetDateTime.now());
-        testBox.setUpdatedAt(OffsetDateTime.now());
         entityManager.persist(testBox);
 
         SubscriptionBoxPrice price = new SubscriptionBoxPrice();
@@ -64,6 +66,7 @@ class CartServiceIntegrationTest {
         price.setCurrency("CAD");
         price.setStartsAt(OffsetDateTime.now().minusDays(1));
         price.setEndsAt(null);
+        price.setStripePriceId("price_test_" + System.nanoTime());
         entityManager.persist(price);
 
         entityManager.flush();

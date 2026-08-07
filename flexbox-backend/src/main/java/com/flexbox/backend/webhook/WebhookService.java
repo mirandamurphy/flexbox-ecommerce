@@ -80,7 +80,6 @@ public class WebhookService {
                         "No CheckoutSession found for Stripe session " + stripeSession.getId()));
 
         checkoutSession.setStatus(CheckoutSessionStatus.COMPLETE);
-        checkoutSession.setUpdatedAt(OffsetDateTime.now());
 
         Payment payment = checkoutSession.getPayment();
         payment.setStatus(PaymentStatus.SUCCEEDED);
@@ -88,8 +87,7 @@ public class WebhookService {
         payment.setStripePaymentIntentId(stripeSession.getPaymentIntent());
 
         Order order = payment.getOrder();
-        order.setOrderStatus(OrderStatus.COMPLETED);
-        order.setUpdatedAt(OffsetDateTime.now());
+        order.setStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
 
         checkoutSessionRepository.save(checkoutSession);
@@ -103,15 +101,13 @@ public class WebhookService {
         checkoutSessionRepository.findByStripeSessionId(stripeSession.getId())
                 .ifPresent(checkoutSession -> {
                     checkoutSession.setStatus(CheckoutSessionStatus.EXPIRED);
-                    checkoutSession.setUpdatedAt(OffsetDateTime.now());
                     checkoutSessionRepository.save(checkoutSession);
 
                     Payment payment = checkoutSession.getPayment();
                     payment.setStatus(PaymentStatus.FAILED);
 
                     Order order = payment.getOrder();
-                    order.setOrderStatus(OrderStatus.CANCELLED);
-                    order.setUpdatedAt(OffsetDateTime.now());
+                    order.setStatus(OrderStatus.CANCELLED);
                     orderRepository.save(order);
                 });
     }

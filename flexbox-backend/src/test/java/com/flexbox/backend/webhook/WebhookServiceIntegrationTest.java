@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,18 +63,17 @@ class WebhookServiceIntegrationTest {
         User user = new User();
         user.setEmail("webhook-test@flexbox.ca");
         user.setPasswordHash("dummy-hash");
+        user.setFirstName("Test");
+        user.setLastName("User");
+        user.setPhoneNumber("1234567890");
         user.setIsEnabled(true);
-        user.setCreatedAt(OffsetDateTime.now());
-        user.setUpdatedAt(OffsetDateTime.now());
         entityManager.persist(user);
 
         testOrder = new Order();
         testOrder.setUser(user);
         testOrder.setCurrency("CAD");
         testOrder.setTotalAmount(new BigDecimal("29.99"));
-        testOrder.setOrderStatus(OrderStatus.PENDING);
-        testOrder.setOrderDate(OffsetDateTime.now());
-        testOrder.setUpdatedAt(OffsetDateTime.now());
+        testOrder.setStatus(OrderStatus.PENDING);
         entityManager.persist(testOrder);
 
         testPayment = new Payment();
@@ -94,8 +92,6 @@ class WebhookServiceIntegrationTest {
         testCheckoutSession.setAmountSubtotal(new BigDecimal("29.99"));
         testCheckoutSession.setAmountTotal(new BigDecimal("29.99"));
         testCheckoutSession.setCurrency("CAD");
-        testCheckoutSession.setCreatedAt(OffsetDateTime.now());
-        testCheckoutSession.setUpdatedAt(OffsetDateTime.now());
         entityManager.persist(testCheckoutSession);
 
         entityManager.flush();
@@ -130,7 +126,7 @@ class WebhookServiceIntegrationTest {
         Payment updatedPayment = paymentRepository.findById(testPayment.getId()).orElseThrow();
         CheckoutSession updatedSession = checkoutSessionRepository.findById(testCheckoutSession.getId()).orElseThrow();
 
-        assertThat(updatedOrder.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(updatedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
         assertThat(updatedPayment.getStatus()).isEqualTo(PaymentStatus.SUCCEEDED);
         assertThat(updatedPayment.getStripePaymentIntentId()).isEqualTo(STRIPE_PAYMENT_INTENT_ID);
         assertThat(updatedSession.getStatus()).isEqualTo(CheckoutSessionStatus.COMPLETE);
@@ -146,7 +142,7 @@ class WebhookServiceIntegrationTest {
         Payment updatedPayment = paymentRepository.findById(testPayment.getId()).orElseThrow();
         CheckoutSession updatedSession = checkoutSessionRepository.findById(testCheckoutSession.getId()).orElseThrow();
 
-        assertThat(updatedOrder.getOrderStatus()).isEqualTo(OrderStatus.CANCELLED);
+        assertThat(updatedOrder.getStatus()).isEqualTo(OrderStatus.CANCELLED);
         assertThat(updatedPayment.getStatus()).isEqualTo(PaymentStatus.FAILED);
         assertThat(updatedSession.getStatus()).isEqualTo(CheckoutSessionStatus.EXPIRED);
     }
@@ -164,6 +160,6 @@ class WebhookServiceIntegrationTest {
         assertThat(count).isEqualTo(1);
 
         Order updatedOrder = orderRepository.findById(testOrder.getId()).orElseThrow();
-        assertThat(updatedOrder.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(updatedOrder.getStatus()).isEqualTo(OrderStatus.COMPLETED);
     }
 }

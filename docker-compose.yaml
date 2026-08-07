@@ -14,6 +14,7 @@ services:
       - .env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://app-db:5432/${APP_DB}?stringtype=unspecified
+      SPRING_FLYWAY_URL: jdbc:postgresql://app-db:5432/${APP_DB}?stringtype=unspecified
       SPRING_DATASOURCE_USERNAME: ${DB_APP_ROLE}
       SPRING_DATASOURCE_PASSWORD: ${DB_APP_PASSWORD}
       # Migration user for Flyway
