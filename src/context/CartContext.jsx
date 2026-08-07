@@ -1,52 +1,74 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+
+import {
+  addItemToCart,
+  getCart,
+  removeCartItem,
+  updateCartItemQuantity,
+} from "../services/cartService";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext(null);
 
+function toDisplayItem(apiItem) {
+  return {
+    id: apiItem.id,
+    subscriptionBoxId: apiItem.subscriptionBoxId,
+    name: apiItem.subscriptionBoxName,
+    price: apiItem.unitPrice,
+    quantity: apiItem.quantity,
+  };
+}
+
 export function CartProvider({ children }) {
+  const { currentUser } = useAuth();
   const [cartItems, setCartItems] = useState([]);
 
-  function addToCart(box) {
-    setCartItems((currentItems) => {
-      const existingItem = currentItems.find(
-        (item) => item.id === box.id
-      );
-
-      if (existingItem) {
-        return currentItems.map((item) =>
-          item.id === box.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-
-      return [...currentItems, { ...box, quantity: 1 }];
-    });
-  }
-
-  function removeFromCart(id) {
-    setCartItems((currentItems) =>
-      currentItems.filter((item) => item.id !== id)
-    );
-  }
-
-  function updateQuantity(id, quantity) {
-    const safeQuantity = Number(quantity);
-
-    if (safeQuantity <= 0) {
-      removeFromCart(id);
+  async function refreshCart() {
+    if (!currentUser) {
+      setCartItems([]);
       return;
     }
 
-    setCartItems((currentItems) =>
-      currentItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: safeQuantity }
-          : item
-      )
-    );
+    const response = await getCart(currentUser.id);
+    setCartItems(response.data.items.map(toDisplayItem));
+  }
+
+  useEffect(() => {
+    refreshCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
+
+  async function addToCart(box) {
+    if (!currentUser) {
+      return;
+    }
+
+    await addItemToCart(currentUser.id, box.id, 1);
+    await refreshCart();
+  }
+
+  async function removeFromCart(cartItemId) {
+    await removeCartItem(cartItemId);
+    await refreshCart();
+  }
+
+  async function updateQuantity(cartItemId, quantity) {
+    const safeQuantity = Number(quantity);
+
+    if (safeQuantity <= 0) {
+      await removeFromCart(cartItemId);
+      return;
+    }
+
+    await updateCartItemQuantity(cartItemId, safeQuantity);
+    await refreshCart();
   }
 
   function clearCart() {
+    // No bulk clear endpoint exists yet. This resets the visible cart
+    // client side, used after a checkout redirect where the user is
+    // about to leave the app for Stripe anyway.
     setCartItems([]);
   }
 

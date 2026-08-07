@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
+import { loginUser, registerUser } from "../services/authService";
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -13,40 +15,50 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  function login(email, password) {
+  async function login(email, password) {
     if (!email || !password) {
       throw new Error("Email and password are required.");
     }
 
+    const response = await loginUser({ email, password });
+    const { userId, email: returnedEmail, token } = response.data;
+
     const user = {
-      id: 1,
-      name: "Demo Customer",
-      email,
-      role: email.includes("admin") ? "ADMIN" : "CUSTOMER",
+      id: userId,
+      email: returnedEmail,
     };
 
     localStorage.setItem("flexboxUser", JSON.stringify(user));
-    localStorage.setItem("flexboxToken", "mock-jwt-token");
+    localStorage.setItem("flexboxToken", token);
 
     setCurrentUser(user);
 
     return user;
   }
 
-  function register({ name, email, password }) {
+  async function register({ name, email, password }) {
     if (!name || !email || !password) {
       throw new Error("All fields are required.");
     }
 
-    const user = {
-      id: Date.now(),
-      name,
+    const [firstName, ...rest] = name.trim().split(" ");
+    const lastName = rest.join(" ") || firstName;
+
+    const response = await registerUser({
+      firstName,
+      lastName,
       email,
-      role: "CUSTOMER",
+      password,
+    });
+    const { userId, email: returnedEmail, token } = response.data;
+
+    const user = {
+      id: userId,
+      email: returnedEmail,
     };
 
     localStorage.setItem("flexboxUser", JSON.stringify(user));
-    localStorage.setItem("flexboxToken", "mock-jwt-token");
+    localStorage.setItem("flexboxToken", token);
 
     setCurrentUser(user);
 

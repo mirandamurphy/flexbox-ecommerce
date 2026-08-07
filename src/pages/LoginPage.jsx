@@ -23,20 +23,17 @@ function LoginPage() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
     try {
-      const user = login(formData.email, formData.password);
-
-      if (user.role === "ADMIN") {
-        navigate("/admin");
-      } else {
-        navigate("/profile");
-      }
+      await login(formData.email, formData.password);
+      navigate("/profile");
     } catch (loginError) {
-      setError(loginError.message);
+      const message =
+        loginError.response?.data?.detail || loginError.message;
+      setError(message);
     }
   }
 

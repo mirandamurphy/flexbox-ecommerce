@@ -24,7 +24,7 @@ public class AuthService {
     }
 
 
-    public String register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
 
         User user = new User();
 
@@ -36,24 +36,37 @@ public class AuthService {
         user.setLastName(request.getLastName());
         user.setIsEnabled(true);
 
-        userRepository.save(user);
+        user = userRepository.save(user);
 
-        return "User registered successfully";
+        org.springframework.security.core.userdetails.User userDetails =
+                new org.springframework.security.core.userdetails.User(
+                        user.getEmail(),
+                        user.getPasswordHash(),
+                        true,
+                        true,
+                        true,
+                        true,
+                        java.util.Collections.emptyList()
+                );
+
+        String token = jwtService.generateToken(userDetails);
+
+        return new AuthResponse(user.getId(), user.getEmail(), token);
     }
 
 
-    public String login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() ->
-                        new RuntimeException("User not found")
+                        new InvalidCredentialsException("Invalid email or password")
                 );
 
         if (!passwordEncoder.matches(
                 request.getPassword(),
                 user.getPasswordHash()
         )) {
-            throw new RuntimeException("Invalid password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
         org.springframework.security.core.userdetails.User userDetails =
@@ -67,6 +80,8 @@ public class AuthService {
                         java.util.Collections.emptyList()
                 );
 
-        return jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
+
+        return new AuthResponse(user.getId(), user.getEmail(), token);
     }
 }

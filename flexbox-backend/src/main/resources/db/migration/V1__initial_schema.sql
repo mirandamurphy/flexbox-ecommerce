@@ -107,7 +107,7 @@ CREATE TABLE public."user" (
                                password_hash text NOT NULL,
                                first_name text NOT NULL,
                                last_name text NOT NULL,
-                               phone_number character varying(15) NOT NULL,
+                               phone_number character varying(15),
                                is_enabled boolean DEFAULT false NOT NULL,
                                created_at timestamp with time zone DEFAULT now() NOT NULL,
                                updated_at timestamp with time zone NOT NULL,
@@ -286,13 +286,16 @@ CREATE TABLE public.cart_item (
 CREATE TABLE public."order" (
                                 order_id bigint GENERATED ALWAYS AS IDENTITY,
                                 user_id bigint NOT NULL,
-                                shipping_address_id bigint NOT NULL,
-                                billing_address_id bigint NOT NULL,
+                                shipping_address_id bigint,
+                                billing_address_id bigint,
                                 currency character varying(3) DEFAULT 'CAD'::character varying NOT NULL,
                                 total_amount numeric(7,2) NOT NULL,
                                 order_date timestamp with time zone DEFAULT now() NOT NULL,
                                 updated_at timestamp with time zone NOT NULL,
                                 status public.order_status DEFAULT 'PENDING'::public.order_status NOT NULL,
+                                -- shipping/billing address are nullable: not every checkout flow
+                                -- collects an address at order-creation time (cart-based checkout
+                                -- does not, currently).
                                 CONSTRAINT order_pkey PRIMARY KEY (order_id),
                                 CONSTRAINT order_user_id_fkey FOREIGN KEY (user_id) REFERENCES public."user"(user_id) DEFERRABLE,
                                 CONSTRAINT order_shipping_address_id_fkey FOREIGN KEY (shipping_address_id) REFERENCES public.address(address_id) DEFERRABLE,
@@ -351,7 +354,7 @@ CREATE TABLE public.checkout_session (
                                          checkout_session_id bigint GENERATED ALWAYS AS IDENTITY,
                                          user_id bigint NOT NULL,
                                          stripe_session_id text,
-                                         subscription_plan_id bigint NOT NULL,
+                                         subscription_plan_id bigint,
                                          payment_id bigint,
                                          amount_subtotal numeric(7,2),
                                          amount_tax numeric(7,2),
@@ -365,6 +368,8 @@ CREATE TABLE public.checkout_session (
                                          updated_at timestamp with time zone NOT NULL,
                                          mode public.checkout_session_mode NOT NULL,
                                          status public.checkout_session_status NOT NULL,
+                                         -- subscription_plan_id is nullable: checkout sessions can represent either
+                                         -- a single subscription plan purchase or a cart-based multi-item order.
                                          CONSTRAINT checkout_session_pkey PRIMARY KEY (checkout_session_id),
                                          CONSTRAINT checkout_session_stripe_session_id_key UNIQUE (stripe_session_id),
                                          CONSTRAINT amount_subtotal_check CHECK (amount_subtotal > (0)::numeric),
@@ -472,9 +477,6 @@ CREATE TRIGGER trg_cart_item_updated_at BEFORE INSERT OR UPDATE ON public.cart_i
     FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 CREATE TRIGGER trg_order_updated_at BEFORE INSERT OR UPDATE ON public."order"
-    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
-
-CREATE TRIGGER trg_order_item_updated_at BEFORE INSERT OR UPDATE ON public.order_item
     FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 CREATE TRIGGER trg_payment_updated_at BEFORE INSERT OR UPDATE ON public.payment

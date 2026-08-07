@@ -33,8 +33,12 @@ public class CheckoutSession {
     @Column(name = "stripe_session_id", length = Integer.MAX_VALUE)
     private String stripeSessionId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "subscription_plan_id", nullable = false)
+    // Nullable: a checkout session represents either a single subscription
+    // plan purchase, or a cart-based multi-item order (subscriptionPlan is
+    // null in that case). Matches the database column, which was already
+    // nullable before this branch was merged.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_plan_id")
     private SubscriptionPlan subscriptionPlan;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,6 +88,4 @@ public class CheckoutSession {
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", columnDefinition = "checkout_session_status not null")
     private CheckoutSessionStatus status;
-
-
 }

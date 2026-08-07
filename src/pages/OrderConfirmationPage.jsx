@@ -1,13 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function OrderConfirmationPage() {
-  const savedOrder = localStorage.getItem(
-    "latestFlexboxOrder"
-  );
+  const [searchParams] = useSearchParams();
+  const orderId = searchParams.get("order_id");
 
-  const order = savedOrder ? JSON.parse(savedOrder) : null;
-
-  if (!order) {
+  if (!orderId) {
     return (
       <main className="page">
         <h1>No Recent Order</h1>
@@ -21,7 +18,7 @@ function OrderConfirmationPage() {
       <section className="confirmation-card">
         <p className="success-badge">Payment Successful</p>
 
-        <h1>Thank you, {order.customerName}!</h1>
+        <h1>Thank you for your order!</h1>
 
         <p>
           Your order has been created successfully. A confirmation
@@ -31,17 +28,7 @@ function OrderConfirmationPage() {
         <dl className="order-details-list">
           <div>
             <dt>Order Number</dt>
-            <dd>{order.orderNumber}</dd>
-          </div>
-
-          <div>
-            <dt>Order Date</dt>
-            <dd>{order.date}</dd>
-          </div>
-
-          <div>
-            <dt>Total</dt>
-            <dd>${order.total.toFixed(2)}</dd>
+            <dd>{orderId}</dd>
           </div>
         </dl>
 

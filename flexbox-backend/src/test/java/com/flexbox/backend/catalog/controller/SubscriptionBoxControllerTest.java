@@ -38,7 +38,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes")
+                .uri("/api/subscription-boxes")
                 .exchange();
 
         assertThat(result)
@@ -80,7 +80,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes/1")
+                .uri("/api/subscription-boxes/1")
                 .exchange();
 
         assertThat(result)
@@ -100,7 +100,7 @@ class SubscriptionBoxControllerTest {
 
         var result = mockMvcTester
                 .get()
-                .uri("/subscription-boxes/10")
+                .uri("/api/subscription-boxes/10")
                 .exchange();
 
         assertThat(result)
