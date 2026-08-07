@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = StripeException.class)
 public class CheckoutService {
 
     private final CartItemRepository cartItemRepository;
