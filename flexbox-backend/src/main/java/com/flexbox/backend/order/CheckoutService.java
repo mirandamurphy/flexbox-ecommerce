@@ -105,9 +105,9 @@ public class CheckoutService {
                 .toList();
 
         order.setStatus(OrderStatus.PENDING);
-        order = orderRepository.save(order);
-
         BigDecimal total = sumTotal(lineItems);
+        order.setTotalAmount(total);
+        order = orderRepository.save(order);
 
         return buildPaymentAndSession(order.getUser(), order, total, lineItems);
     }
