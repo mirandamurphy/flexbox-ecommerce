@@ -1,4 +1,4 @@
-package com.flexbox.backend.cart.model;
+package com.flexbox.backend.cart;
 
 import com.flexbox.backend.user.User;
 import jakarta.persistence.*;

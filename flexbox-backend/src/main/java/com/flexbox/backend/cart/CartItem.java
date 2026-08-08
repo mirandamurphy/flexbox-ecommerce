@@ -1,4 +1,4 @@
-package com.flexbox.backend.cart.model;
+package com.flexbox.backend.cart;
 
 import com.flexbox.backend.catalog.model.SubscriptionBox;
 import jakarta.persistence.*;
