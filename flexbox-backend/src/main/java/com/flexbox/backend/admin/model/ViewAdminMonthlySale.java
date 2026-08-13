@@ -1,0 +1,36 @@
+package com.flexbox.backend.admin.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import org.hibernate.annotations.Immutable;
+
+import java.math.BigDecimal;
+
+@Getter
+@Entity
+@Immutable
+@Table(name = "view_admin_monthly_sales", schema = "public")
+public class ViewAdminMonthlySale {
+    @EmbeddedId
+    private ViewAdminMonthlySaleId id;
+
+    @Column(name = "box_name")
+    private String boxName;
+
+    @Column(name = "units_sold")
+    private Long unitsSold;
+
+    @Column(name = "gross_revenue")
+    private BigDecimal grossRevenue;
+
+    @Column(name = "product_cost")
+    private BigDecimal productCost;
+
+    @Column(name = "gross_profit")
+    private BigDecimal grossProfit;
+
+
+}

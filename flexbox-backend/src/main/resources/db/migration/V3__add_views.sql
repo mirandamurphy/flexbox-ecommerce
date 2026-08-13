@@ -22,6 +22,7 @@ WHERE p.is_active = true;
 
 GRANT SELECT ON view_active_subscription_box_products TO flexbox_app;
 
+-- 2. Subscription Box Cost View
 CREATE OR REPLACE VIEW view_subscription_box_cost AS
 SELECT subscription_box_id,
        box_name,
@@ -31,6 +32,7 @@ GROUP BY subscription_box_id, box_name;
 
 GRANT SELECT ON view_subscription_box_cost TO flexbox_app;
 
+-- 3. Monthly Sales View
 CREATE OR REPLACE VIEW view_admin_monthly_sales AS
 WITH sales AS (SELECT o.order_date,
                       sb.subscription_box_id,
@@ -48,13 +50,13 @@ WITH sales AS (SELECT o.order_date,
                               FROM payment p
                               WHERE p.order_id = o.order_id
                                 AND p.status = 'SUCCEEDED'::payment_status)))
-SELECT date_trunc('month'::text, order_date)       AS month,
+SELECT date_trunc('month'::text, order_date) AS month,
        subscription_box_id,
        box_name,
-       sum(quantity)                               AS units_sold,
-       sum(revenue)::numeric(12, 2)                AS gross_revenue,
-       sum(product_cost)::numeric(12, 2)           AS product_cost,
-       sum(revenue - product_cost)::numeric(12, 2) AS gross_profit
+       sum(quantity)                         AS units_sold,
+       sum(revenue)                          AS gross_revenue,
+       sum(product_cost)                     AS product_cost,
+       sum(revenue - product_cost)           AS gross_profit
 FROM sales
 GROUP BY (date_trunc('month'::text, order_date)), subscription_box_id, box_name;
 
