@@ -1,8 +1,9 @@
 package com.flexbox.backend.catalog.repository;
 
 import com.flexbox.backend.TestcontainersConfiguration;
-import com.flexbox.backend.catalog.model.SubscriptionBox;
-import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.box.model.SubscriptionBox;
+import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

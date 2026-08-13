@@ -1,13 +1,14 @@
 package com.flexbox.backend.catalog.service;
 
-import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxDetail;
+import com.flexbox.backend.catalog.dto.subscriptionbox.BoxDetailResponse;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
-import com.flexbox.backend.catalog.model.SubscriptionBox;
-import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
-import com.flexbox.backend.catalog.model.SubscriptionBoxProduct;
-import com.flexbox.backend.catalog.repository.SubscriptionBoxPriceRepository;
-import com.flexbox.backend.catalog.repository.SubscriptionBoxProductRepository;
-import com.flexbox.backend.catalog.repository.SubscriptionBoxRepository;
+import com.flexbox.backend.catalog.box.model.SubscriptionBox;
+import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.box.model.SubscriptionBoxProduct;
+import com.flexbox.backend.catalog.box.service.SubscriptionBoxService;
+import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;
+import com.flexbox.backend.catalog.box.repository.SubscriptionBoxProductRepository;
+import com.flexbox.backend.catalog.box.repository.SubscriptionBoxRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -162,7 +163,7 @@ class SubscriptionBoxServiceTest {
         var result = subscriptionBoxService.getSubscriptionBoxById(id);
 
         assertThat(result).isNotNull()
-                .isExactlyInstanceOf(SubscriptionBoxDetail.class);
+                .isExactlyInstanceOf(BoxDetailResponse.class);
 
         assertThat(result.id()).isEqualTo(1L);
         assertThat(result.name()).isEqualTo("Monthly Box");

@@ -1,10 +1,11 @@
 package com.flexbox.backend.catalog.service;
 
-import com.flexbox.backend.catalog.dto.product.ProductDetail;
+import com.flexbox.backend.catalog.product.response.ProductResponse;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
-import com.flexbox.backend.catalog.model.Category;
-import com.flexbox.backend.catalog.model.Product;
-import com.flexbox.backend.catalog.repository.ProductRepository;
+import com.flexbox.backend.catalog.product.model.Category;
+import com.flexbox.backend.catalog.product.model.Product;
+import com.flexbox.backend.catalog.product.service.ProductService;
+import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,7 +102,7 @@ class ProductServiceTest {
         var result = productService.getProductById(id);
 
         assertThat(result).isNotNull()
-                .isExactlyInstanceOf(ProductDetail.class);
+                .isExactlyInstanceOf(ProductResponse.class);
 
         assertThat(result.id()).isEqualTo(1L);
         assertThat(result.brand()).isEqualTo("Protein Mix");

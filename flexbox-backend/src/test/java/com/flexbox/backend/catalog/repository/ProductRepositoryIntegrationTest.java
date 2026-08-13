@@ -1,6 +1,7 @@
 package com.flexbox.backend.catalog.repository;
 
 import com.flexbox.backend.TestcontainersConfiguration;
+import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

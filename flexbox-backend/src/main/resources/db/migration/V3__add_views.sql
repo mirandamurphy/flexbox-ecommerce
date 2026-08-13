@@ -4,7 +4,7 @@
 --              syncs updated product quantities for sub-boxes so metrics look realistic.
 
 -- 1. Active Subscription Box Products View
-CREATE OR REPLACE VIEW view_active_subscription_box_products AS
+CREATE OR REPLACE VIEW view_subscription_box_product_cost AS
 SELECT sb.subscription_box_id,
        sb.name                                                   AS box_name,
        p.product_id,
@@ -20,20 +20,20 @@ FROM subscription_box sb
          JOIN category c ON p.category_id = c.category_id
 WHERE p.is_active = true;
 
-GRANT SELECT ON view_active_subscription_box_products TO flexbox_app;
+GRANT SELECT ON view_subscription_box_product_cost TO flexbox_app;
 
 -- 2. Subscription Box Cost View
 CREATE OR REPLACE VIEW view_subscription_box_cost AS
 SELECT subscription_box_id,
        box_name,
        sum(product_cost)::numeric(12, 2) AS box_cost
-FROM view_active_subscription_box_products
+FROM view_subscription_box_product_cost
 GROUP BY subscription_box_id, box_name;
 
 GRANT SELECT ON view_subscription_box_cost TO flexbox_app;
 
 -- 3. Monthly Sales View
-CREATE OR REPLACE VIEW view_admin_monthly_sales AS
+CREATE OR REPLACE VIEW view_monthly_sales AS
 WITH sales AS (SELECT o.order_date,
                       sb.subscription_box_id,
                       sb.name                                           AS box_name,
@@ -60,7 +60,7 @@ SELECT date_trunc('month'::text, order_date) AS month,
 FROM sales
 GROUP BY (date_trunc('month'::text, order_date)), subscription_box_id, box_name;
 
-GRANT SELECT ON view_admin_monthly_sales TO flexbox_app;
+GRANT SELECT ON view_monthly_sales TO flexbox_app;
 
 
 -- Sync updated quantities

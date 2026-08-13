@@ -1,10 +1,10 @@
 package com.flexbox.backend.catalog.controller;
 
-import com.flexbox.backend.catalog.dto.category.CategorySummary;
-import com.flexbox.backend.catalog.dto.product.ProductDetail;
+import com.flexbox.backend.catalog.product.response.CategorySummaryResponse;
+import com.flexbox.backend.catalog.product.response.ProductResponse;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
-import com.flexbox.backend.catalog.response.ProductListResponse;
-import com.flexbox.backend.catalog.service.ProductService;
+import com.flexbox.backend.catalog.product.controller.ProductController;
+import com.flexbox.backend.catalog.product.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -55,12 +55,12 @@ class ProductControllerTest {
         Long categoryId = 1L;
 
         when(productService.getProductById(productId))
-                .thenReturn(new ProductDetail(
+                .thenReturn(new ProductResponse(
                         4L,
                         "Chocolate Whey Protein Packet",
                         "FitFuel",
                         "Single-serve whey protein powder, 25g protein",
-                        new CategorySummary(
+                        new CategorySummaryResponse(
                                 categoryId,
                                 "snacks"),
                         true

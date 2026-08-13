@@ -1,11 +1,11 @@
 package com.flexbox.backend.catalog.controller;
 
-import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxDetail;
-import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxPriceSummary;
-import com.flexbox.backend.catalog.dto.subscriptionbox.SubscriptionBoxProductSummary;
+import com.flexbox.backend.catalog.box.controller.SubscriptionBoxController;
+import com.flexbox.backend.catalog.dto.subscriptionbox.BoxDetailResponse;
+import com.flexbox.backend.catalog.dto.subscriptionbox.BoxPriceResponse;
+import com.flexbox.backend.catalog.dto.subscriptionbox.BoxProductResponse;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
-import com.flexbox.backend.catalog.response.SubscriptionBoxListResponse;
-import com.flexbox.backend.catalog.service.SubscriptionBoxService;
+import com.flexbox.backend.catalog.box.service.SubscriptionBoxService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -31,7 +31,7 @@ class SubscriptionBoxControllerTest {
     SubscriptionBoxService subscriptionBoxService;
 
     @Test
-    void getAllSubscriptionBoxes_shouldReturn200_andListResponse_whenBoxesExist() {
+    void getAllBoxes_shouldReturn200_andListResponse_whenBoxesExist() {
 
         when(subscriptionBoxService.getAllSubscriptionBoxes())
                 .thenReturn(new SubscriptionBoxListResponse(List.of()));
@@ -46,7 +46,7 @@ class SubscriptionBoxControllerTest {
     }
 
     @Test
-    void getSubscriptionBoxById_shouldReturn200_andBoxDetail_whenBoxExists() {
+    void getBoxById_shouldReturn200_andBoxDetail_whenBoxExists() {
 
         var expected = new ClassPathResource(
                 "responses/sub-boxes/get-sub-box-by-id.json"
@@ -55,24 +55,22 @@ class SubscriptionBoxControllerTest {
         Long boxId = 1L;
 
         when(subscriptionBoxService.getSubscriptionBoxById(boxId))
-                .thenReturn(new SubscriptionBoxDetail(
+                .thenReturn(new BoxDetailResponse(
                                 1L,
                                 "Essential Fitness Box",
                                 "Entry-level box featuring a mix of protein snacks, hydration products, personal care items, and basic fitness accessories.",
-                                new SubscriptionBoxPriceSummary(
+                                "/images/summer-box.jpg",
+                                new BoxPriceResponse(
                                         BigDecimal.valueOf(29.99),
                                         "CAD"
                                 ), List.of(
-                                new SubscriptionBoxProductSummary(
+                                new BoxProductResponse(
                                         8L,
-                                        "PB Protein Crunch Bar",
-                                        "PowerBar Pro",
+                                        ,
                                         1
                                 ),
-                                new SubscriptionBoxProductSummary(
-                                        9L,
-                                        "Protein Cookie",
-                                        "ActiveLife",
+                                new BoxProductResponse(
+                                        9,
                                         1
                                 )
                         ))
@@ -91,7 +89,7 @@ class SubscriptionBoxControllerTest {
 
 
     @Test
-    void getSubscriptionBoxById_shouldReturn404_whenBoxNotFound() {
+    void getBoxById_shouldReturn404_whenBoxNotFound() {
 
         Long id = 10L;
 
