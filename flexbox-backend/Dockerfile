@@ -10,7 +10,7 @@ RUN ./mvnw dependency:go-offline -B
 
 # Copy source code and compile
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean package
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
