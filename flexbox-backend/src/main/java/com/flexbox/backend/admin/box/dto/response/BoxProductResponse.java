@@ -8,14 +8,13 @@ public record BoxProductResponse(
         String productName,
         Integer quantity
 ) {
-
-    public static BoxProductResponse from(
-            SubscriptionBoxProduct boxProduct) {
+    public static BoxProductResponse from(SubscriptionBoxProduct boxProduct) {
+        var product = boxProduct.getProduct();
 
         return new BoxProductResponse(
                 boxProduct.getSubscriptionBox().getId(),
-                boxProduct.getProduct().getId(),
-                boxProduct.getProduct().getName(),
+                product.getId(),
+                product.getName(),
                 boxProduct.getQuantity()
         );
     }
