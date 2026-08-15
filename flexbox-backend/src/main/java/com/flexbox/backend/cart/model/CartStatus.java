@@ -1,4 +1,4 @@
-package com.flexbox.backend.cart;
+package com.flexbox.backend.cart.model;
 
 public enum CartStatus {
     ACTIVE,
