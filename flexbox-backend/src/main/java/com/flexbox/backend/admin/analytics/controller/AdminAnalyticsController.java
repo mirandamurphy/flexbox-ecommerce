@@ -24,16 +24,16 @@ public class AdminAnalyticsController {
 
     @GetMapping("/boxes")
     public ResponseEntity<CollectionResponse<SubscriptionBoxCostResponse>> getAllBoxCosts() {
-        return ResponseEntity.ok(adminAnalyticsService.getAllBoxCosts());
+        return ResponseEntity.ok(adminAnalyticsService.getBoxCosts());
     }
 
-    @GetMapping("boxes/products")
+    @GetMapping("/boxes/products")
     public ResponseEntity<CollectionResponse<SubscriptionBoxProductCostResponse>> getAllBoxProductCosts() {
-        return ResponseEntity.ok(adminAnalyticsService.getAllBoxProductCosts());
+        return ResponseEntity.ok(adminAnalyticsService.getBoxProductCosts());
     }
 
 
-    @GetMapping("boxes/{boxId}/products")
+    @GetMapping("/boxes/{boxId}/products")
     public ResponseEntity<CollectionResponse<SubscriptionBoxProductCostResponse>> getBoxProductCostByBoxId (
             @PathVariable Long boxId) {
         return ResponseEntity.ok(adminAnalyticsService.getBoxProductCostByBoxId(boxId));
@@ -42,7 +42,7 @@ public class AdminAnalyticsController {
 
     @GetMapping("/sales")
     public ResponseEntity<CollectionResponse<MonthlySalesResponse>> getAllMonthlySales() {
-        return ResponseEntity.ok(adminAnalyticsService.getAllMonthlySales());
+        return ResponseEntity.ok(adminAnalyticsService.getMonthlySales());
     }
 
 }

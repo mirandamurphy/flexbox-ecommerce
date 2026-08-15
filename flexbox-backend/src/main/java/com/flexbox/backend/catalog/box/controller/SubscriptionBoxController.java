@@ -21,16 +21,14 @@ public class SubscriptionBoxController {
     }
 
     @GetMapping
-    public ResponseEntity<CollectionResponse<BoxSummaryResponse>> getAllBoxes() {
-        var boxes = boxService.getAllSubscriptionBoxes();
-        return ResponseEntity.ok(boxes);
+    public ResponseEntity<CollectionResponse<BoxSummaryResponse>> getBoxes() {
+        return ResponseEntity.ok(boxService.getBoxes());
     }
 
     @GetMapping("/{boxId}")
     public ResponseEntity<BoxDetailResponse> getBoxById(
             @PathVariable Long boxId) {
-        var box = boxService.getSubscriptionBoxById(boxId);
-        return ResponseEntity.ok(box);
+        return ResponseEntity.ok(boxService.getBoxById(boxId));
     }
 
 }

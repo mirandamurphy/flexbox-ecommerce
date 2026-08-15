@@ -8,7 +8,7 @@ import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartItem;
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxRepository;
-import com.flexbox.backend.repository.UserRepository;
+import com.flexbox.backend.user.repository.UserRepository;
 import com.flexbox.backend.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

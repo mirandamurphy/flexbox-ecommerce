@@ -28,7 +28,7 @@ public class SubscriptionBoxService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<BoxSummaryResponse> getAllSubscriptionBoxes() {
+    public CollectionResponse<BoxSummaryResponse> getBoxes() {
         var boxes = boxRepository.findAll()
                 .stream()
                 .map(box ->
@@ -48,7 +48,7 @@ public class SubscriptionBoxService {
     }
 
     @Transactional(readOnly = true)
-    public BoxDetailResponse getSubscriptionBoxById(Long id) {
+    public BoxDetailResponse getBoxById(Long id) {
 
         var box = boxRepository.findById(id)
                 .orElseThrow(() ->

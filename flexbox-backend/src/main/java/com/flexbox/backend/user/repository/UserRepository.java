@@ -1,4 +1,4 @@
-package com.flexbox.backend.repository;
+package com.flexbox.backend.user.repository;
 
 import com.flexbox.backend.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;

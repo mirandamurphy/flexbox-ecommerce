@@ -34,8 +34,9 @@ public class AdminBoxService {
 
     public SubscriptionBox createBox(CreateBoxRequest request) {
         if(boxRepository.existsByNameIgnoreCase(request.name())) {
-            throw new ResourceAlreadyExistsException("A subscription box with that name already exists.");
+            throw new ResourceAlreadyExistsException("A subscription box with the name '%s' already exists.".formatted(request.name()));
         }
+
         var box = new SubscriptionBox();
         box.setName(request.name());
         box.setDescription(request.description());

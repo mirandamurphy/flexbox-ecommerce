@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/boxes")
 public class AdminBoxController {
 
     private final AdminBoxService adminBoxService;
@@ -23,7 +23,7 @@ public class AdminBoxController {
         this.adminBoxService = adminBoxService;
     }
 
-    @PostMapping("/boxes")
+    @PostMapping
     public ResponseEntity<BoxResponse> createBox(
             @Valid @RequestBody CreateBoxRequest request) {
         var box = adminBoxService.createBox(request);
@@ -37,7 +37,7 @@ public class AdminBoxController {
         return ResponseEntity.created(location).body(BoxResponse.from(box));
     }
 
-    @DeleteMapping("/boxes/{boxId}")
+    @DeleteMapping("/{boxId}")
     public ResponseEntity<Void> deleteBoxById(
             @PathVariable Long boxId) {
 
@@ -46,7 +46,7 @@ public class AdminBoxController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/boxes/{boxId}/products")
+    @PostMapping("/{boxId}/products")
     public ResponseEntity<BoxProductResponse> addBoxProduct (
             @PathVariable Long boxId,
             @Valid @RequestBody AddProductToBoxRequest request) {
@@ -61,7 +61,7 @@ public class AdminBoxController {
         return ResponseEntity.created(location).body(BoxProductResponse.from(boxProduct));
     }
 
-    @PostMapping("/boxes/{boxId}/prices")
+    @PostMapping("/{boxId}/prices")
     public ResponseEntity<BoxPriceResponse> setBoxPrice (
             @PathVariable Long boxId,
             @Valid @RequestBody CreateBoxPriceRequest request) {

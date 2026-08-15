@@ -4,7 +4,7 @@ import com.flexbox.backend.cart.CartRepository;
 import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartStatus;
 import com.flexbox.backend.order.dto.CheckoutSessionResponse;
-import com.flexbox.backend.repository.UserRepository;
+import com.flexbox.backend.user.repository.UserRepository;
 import com.flexbox.backend.user.User;
 import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;

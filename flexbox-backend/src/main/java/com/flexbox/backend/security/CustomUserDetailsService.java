@@ -1,6 +1,6 @@
 package com.flexbox.backend.security;
 
-import com.flexbox.backend.repository.UserRepository;
+import com.flexbox.backend.user.repository.UserRepository;
 import com.flexbox.backend.user.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

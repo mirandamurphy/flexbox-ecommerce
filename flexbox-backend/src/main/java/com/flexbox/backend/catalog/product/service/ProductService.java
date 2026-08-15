@@ -18,7 +18,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<ProductResponse> getAllProducts() {
+    public CollectionResponse<ProductResponse> getProducts() {
         var products = productRepository.findAll()
                 .stream()
                 .map(product -> ProductResponse.from(product,

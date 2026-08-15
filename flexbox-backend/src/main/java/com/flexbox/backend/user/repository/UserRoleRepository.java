@@ -1,4 +1,4 @@
-package com.flexbox.backend.repository;
+package com.flexbox.backend.user.repository;
 
 import com.flexbox.backend.user.UserRole;
 import com.flexbox.backend.user.UserRoleId;

@@ -24,7 +24,7 @@ public class AdminAnalyticsService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<SubscriptionBoxCostResponse> getAllBoxCosts() {
+    public CollectionResponse<SubscriptionBoxCostResponse> getBoxCosts() {
 
         var boxCosts = boxCostRepository.findAll()
                 .stream()
@@ -35,7 +35,7 @@ public class AdminAnalyticsService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<SubscriptionBoxProductCostResponse> getAllBoxProductCosts() {
+    public CollectionResponse<SubscriptionBoxProductCostResponse> getBoxProductCosts() {
         var boxProductCosts = boxProductCostRepository.findAll()
                 .stream()
                 .map(SubscriptionBoxProductCostResponse::from)
@@ -55,7 +55,7 @@ public class AdminAnalyticsService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<MonthlySalesResponse> getAllMonthlySales() {
+    public CollectionResponse<MonthlySalesResponse> getMonthlySales() {
         var monthlySales = monthlySalesRepository.findAll()
                 .stream()
                 .map(MonthlySalesResponse::from)

@@ -17,8 +17,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity <CollectionResponse<ProductResponse>> getAllProducts() {
-        var products = productService.getAllProducts();
+    public ResponseEntity <CollectionResponse<ProductResponse>> getProducts() {
+        var products = productService.getProducts();
         return ResponseEntity.ok(products);
     }
 
