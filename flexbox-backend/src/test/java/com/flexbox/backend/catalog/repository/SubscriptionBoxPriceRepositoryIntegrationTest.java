@@ -61,7 +61,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnActivePrice_whenStartsAtIsBeforeCurrentTime_andEndsAtIsNull() {
+    void findActivePriceBySubscriptionBoxId_shouldReturnCurrentPrice_whenStartsAtIsBeforeCurrentTime_andEndsAtIsNull() {
 
 
         var startsAt = CURRENT_TIME.minusDays(1); // starts Aug 1st 2026
@@ -72,7 +72,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isPresent();
         assertThat(result.get().getId()).isEqualTo(activePrice.getId());
@@ -81,7 +81,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnActivePrice_whenEndAtIsNotNull_andEndsAtIsAfterCurrentTime() {
+    void findActivePriceBySubscriptionBoxId_shouldReturnCurrentPrice_whenEndAtIsNotNull_andEndsAtIsAfterCurrentTime() {
 
         var startsAt = CURRENT_TIME.minusDays(1); // starts Aug 1st 2026
         var endsAt = CURRENT_TIME.plusDays(4); // ends August 6th 2026
@@ -91,7 +91,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isPresent();
         assertThat(result.get().getId()).isEqualTo(activePrice.getId());
@@ -99,7 +99,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnPrice_whenStartsAtEqualsNow() {
+    void findCurrentPriceBySubscriptionBoxId_shouldReturnPrice_whenStartsAtEqualsNow() {
 
         var startsAt = CURRENT_TIME; // starts at current time
         var endsAt = CURRENT_TIME.plusDays(4); // ends August 6th 2026
@@ -109,14 +109,14 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isPresent();
         assertThat(result.get().getId()).isEqualTo(activePrice.getId());
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnEmpty_whenEndsAtEqualsNow() {
+    void findCurrentPrice_shouldReturnEmpty_whenEndsAtEqualsNow() {
 
         var startsAt = CURRENT_TIME.minusDays(1); // starts Aug 1st 2026
         var endsAt = CURRENT_TIME; // ends at current time
@@ -126,13 +126,13 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isEmpty();
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnEmpty_whenPriceStartsInFuture_andEndsAtIsNull() {
+    void findCurrentPriceBySubscriptionBoxId_shouldReturnEmpty_whenPriceStartsInFuture_andEndsAtIsNull() {
 
         var startsAt = CURRENT_TIME.plusDays(4); // starts Aug 6th 2026
         OffsetDateTime endsAt = null;
@@ -142,14 +142,14 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
        assertThat(result).isEmpty();
 
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnEmpty_whenStartsAtAfterCurrentTime_andEndsAtIsNotNull() {
+    void findCurrentPrice_shouldReturnEmpty_whenStartsAtAfterCurrentTime_andEndsAtIsNotNull() {
 
         var startsAt = CURRENT_TIME.plusDays(4); // starts Aug 6th 2026
         var endsAt = CURRENT_TIME.plusDays(10); // ends at Aug 10th 2026
@@ -159,14 +159,14 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isEmpty();
 
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnEmpty_whenEndsAtIsBeforeCurrentTime() {
+    void findCurrentPrice_shouldReturnEmpty_whenEndsAtIsBeforeCurrentTime() {
 
         var startsAt = CURRENT_TIME.minusDays(5); // starts July 28th 2026
         var endsAt = CURRENT_TIME.minusSeconds(1); // ends at Aug 2nd 23:28:38
@@ -176,13 +176,13 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(box.getId(), CURRENT_TIME);
+        var result = repo.findCurrentPrice(box.getId(), CURRENT_TIME);
 
         assertThat(result).isEmpty();
     }
 
     @Test
-    void findActivePriceBySubscriptionBoxId_shouldReturnEmpty_whenDifferentSubscriptionBox() {
+    void findCurrentPriceBySubscriptionBoxId_shouldReturnEmpty_whenDifferentSubscriptionBox() {
         var box1 = createSubscriptionBox();
         var box2 = createSubscriptionBox();
 
@@ -194,7 +194,7 @@ class SubscriptionBoxPriceRepositoryIntegrationTest {
 
         entityManager.flush();
 
-        var result = repo.findActivePriceBySubscriptionBoxId(
+        var result = repo.findCurrentPrice(
                 box1.getId(),
                 CURRENT_TIME
         );

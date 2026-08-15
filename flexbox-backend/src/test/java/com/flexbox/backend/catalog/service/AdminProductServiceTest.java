@@ -4,7 +4,7 @@ import com.flexbox.backend.catalog.product.dto.response.ProductResponse;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.product.model.Category;
 import com.flexbox.backend.catalog.product.model.Product;
-import com.flexbox.backend.catalog.product.service.ProductService;
+import com.flexbox.backend.admin.box.service.AdminProductService;
 import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,13 +24,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceTest {
+class AdminProductServiceTest {
 
     @Mock
     ProductRepository productRepository;
 
     @InjectMocks
-    ProductService productService;
+    AdminProductService adminProductService;
 
     private Product product1;
     private Product product2;
@@ -77,12 +77,12 @@ class ProductServiceTest {
     }
 
     @Test
-    void getAllProducts_shouldReturnCollectionDTO() {
+    void getProducts_shouldReturnCollectionDTO() {
 
         when(productRepository.findAll())
                 .thenReturn(List.of(product1, product2));
 
-        var result = productService.getAllProducts();
+        var result = adminProductService.getProducts();
 
         assertThat(result.products())
                 .isNotEmpty()
@@ -99,7 +99,7 @@ class ProductServiceTest {
         when(productRepository.findById(id))
                 .thenReturn(Optional.of(product1));
 
-        var result = productService.getProductById(id);
+        var result = adminProductService.getProductById(id);
 
         assertThat(result).isNotNull()
                 .isExactlyInstanceOf(ProductResponse.class);
@@ -123,7 +123,7 @@ class ProductServiceTest {
         when(productRepository.findById(id))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService
+        assertThatThrownBy(() -> adminProductService
                 .getProductById(id))
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessage("Product not found with ID: " + id);

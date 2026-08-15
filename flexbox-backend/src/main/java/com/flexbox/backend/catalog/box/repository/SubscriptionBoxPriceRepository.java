@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface SubscriptionBoxPriceRepository extends JpaRepository<SubscriptionBoxPrice, Long> {
@@ -24,9 +25,19 @@ public interface SubscriptionBoxPriceRepository extends JpaRepository<Subscripti
             AND (p.endsAt IS NULL OR p.endsAt > :now)
             """
     )
-    Optional<SubscriptionBoxPrice> findActivePriceBySubscriptionBoxId(
+    Optional<SubscriptionBoxPrice> findCurrentPrice(
             @Param("subscriptionBoxId") Long subscriptionBoxId,
             @Param ("now") OffsetDateTime now);
+
+
+    @Query("""
+               SELECT p FROM SubscriptionBoxPrice p
+               WHERE p.subscriptionBox.id IN :boxIds
+               AND p.startsAt <= :now
+               AND (p.endsAt IS NULL OR p.endsAt > :now)
+           
+           """)
+    List<SubscriptionBoxPrice> findCurrentPrices(List<Long> boxIds, OffsetDateTime now);
 
 
 }

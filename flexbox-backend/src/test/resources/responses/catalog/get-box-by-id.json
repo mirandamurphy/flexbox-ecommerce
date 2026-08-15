@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "name": "Running Box",
+  "description": "A running box",
+  "imageUrl": "/images/running_box.jpg",
+  "price": "29.99",
+  "currency": "CAD",
+  "active": true
+}

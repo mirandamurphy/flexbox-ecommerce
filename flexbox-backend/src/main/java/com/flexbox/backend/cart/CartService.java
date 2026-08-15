@@ -55,7 +55,7 @@ public class CartService {
                             + ", requested " + requestedTotal + " total");
         }
 
-        BigDecimal currentPrice = priceRepository.findActivePriceBySubscriptionBoxId(subscriptionBox.getId(), OffsetDateTime.now())
+        BigDecimal currentPrice = priceRepository.findCurrentPrice(subscriptionBox.getId(), OffsetDateTime.now())
                 .map(SubscriptionBoxPrice::getAmount)
                 .orElseThrow(() -> new IllegalStateException(
                         "No active price found for subscription box " + subscriptionBox.getId()));

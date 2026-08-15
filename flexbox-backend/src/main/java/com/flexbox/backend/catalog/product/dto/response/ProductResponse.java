@@ -1,7 +1,9 @@
 package com.flexbox.backend.catalog.product.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.flexbox.backend.catalog.product.model.Category;
 import com.flexbox.backend.catalog.product.model.Product;
+import com.flexbox.backend.catalog.product.model.ProductInventory;
 
 
 public record ProductResponse(
@@ -9,7 +11,7 @@ public record ProductResponse(
         String name,
         String brand,
         String description,
-        @JsonProperty("category") CategorySummaryResponse category,
+        @JsonProperty("category") Category category,
         Boolean isActive
 ) {
 
@@ -18,8 +20,9 @@ public record ProductResponse(
                 product.getName(),
                 product.getBrand(),
                 product.getDescription(),
-                category,
+                product.getCategory(),
                 product.getIsActive());
 
     }
+
 }

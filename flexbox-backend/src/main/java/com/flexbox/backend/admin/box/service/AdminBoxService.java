@@ -14,6 +14,7 @@ import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxProductRepository;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,6 +115,8 @@ public class AdminBoxService {
 
         return boxPriceRepository.save(price);
     }
+
+
 
 
 }

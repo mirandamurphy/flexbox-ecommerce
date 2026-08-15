@@ -38,7 +38,7 @@ public class AdminBoxController {
     }
 
     @DeleteMapping("/{boxId}")
-    public ResponseEntity<Void> deleteBoxById(
+    public ResponseEntity<Void> deactivateBoxById(
             @PathVariable Long boxId) {
 
         adminBoxService.deactivateBox(boxId);
