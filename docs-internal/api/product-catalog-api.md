@@ -3,13 +3,18 @@
 **Authored and maintained by:** Miranda Murphy  
 **Last updated:** 2026-08-04
 
-Base URL:
+Base Context Path: /api 
 
 ```text
 http://localhost:8080
 ```
 
 ---
+
+# Admin API
+
+Context Path: /admin 
+
 
 # Product Catalog API
 
@@ -18,7 +23,7 @@ http://localhost:8080
 ### Endpoint
 
 ```http
-GET /products
+GET /catalog/products
 ```
 
 ### Request
@@ -123,13 +128,13 @@ curl -X GET http://localhost:8080/products/4
 ### Endpoint
 
 ```http
-GET /subscription-boxes
+GET /catalog/boxes
 ```
 
 ### Request
 
 ```bash
-curl -X GET http://localhost:8080/subscription-boxes
+curl -X GET --location "http://localhost/api/catalog/boxes"
 ```
 
 ### Response

@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.product.controller;
 
-import com.flexbox.backend.catalog.product.response.ProductResponse;
+import com.flexbox.backend.catalog.product.dto.response.ProductResponse;
 import com.flexbox.backend.catalog.product.service.ProductService;
 import com.flexbox.backend.common.dto.response.CollectionResponse;
 import org.springframework.http.ResponseEntity;

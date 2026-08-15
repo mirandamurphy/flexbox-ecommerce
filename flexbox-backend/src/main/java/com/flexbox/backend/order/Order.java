@@ -28,12 +28,16 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "shipping_address_id", nullable = false)
+    // Made optional: not every checkout flow collects a shipping address at
+    // order-creation time (e.g. cart-based checkout does not yet). Required
+    // by the subscription-plan checkout flow, not by the cart-based one.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "billing_address_id", nullable = false)
+    // Same reasoning as shippingAddress above.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billing_address_id")
     private Address billingAddress;
 
     @ColumnDefault("'CAD'")
@@ -57,6 +61,4 @@ public class Order {
     @ColumnDefault("'PENDING'")
     @Column(name = "status", columnDefinition = "order_status not null")
     private OrderStatus status;
-
-
 }

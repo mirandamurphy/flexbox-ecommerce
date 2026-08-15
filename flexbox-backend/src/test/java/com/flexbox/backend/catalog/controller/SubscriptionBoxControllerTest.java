@@ -1,9 +1,9 @@
 package com.flexbox.backend.catalog.controller;
 
 import com.flexbox.backend.catalog.box.controller.SubscriptionBoxController;
-import com.flexbox.backend.catalog.dto.subscriptionbox.BoxDetailResponse;
-import com.flexbox.backend.catalog.dto.subscriptionbox.BoxPriceResponse;
-import com.flexbox.backend.catalog.dto.subscriptionbox.BoxProductResponse;
+import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxDetailResponse;
+import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxPriceResponse;
+import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxProductResponse;
 import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
 import com.flexbox.backend.catalog.box.service.SubscriptionBoxService;
 import org.junit.jupiter.api.Test;

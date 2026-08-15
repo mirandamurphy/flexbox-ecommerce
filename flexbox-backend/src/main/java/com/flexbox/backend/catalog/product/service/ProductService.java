@@ -1,7 +1,7 @@
 package com.flexbox.backend.catalog.product.service;
 
-import com.flexbox.backend.catalog.product.response.CategorySummaryResponse;
-import com.flexbox.backend.catalog.product.response.ProductResponse;
+import com.flexbox.backend.catalog.product.dto.response.CategorySummaryResponse;
+import com.flexbox.backend.catalog.product.dto.response.ProductResponse;
 import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import com.flexbox.backend.common.dto.response.CollectionResponse;
 import com.flexbox.backend.common.exception.ResourceNotFoundException;

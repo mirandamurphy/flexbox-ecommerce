@@ -1,4 +1,4 @@
-package com.flexbox.backend.catalog.product.response;
+package com.flexbox.backend.catalog.product.dto.response;
 
 import com.flexbox.backend.catalog.product.model.Category;
 

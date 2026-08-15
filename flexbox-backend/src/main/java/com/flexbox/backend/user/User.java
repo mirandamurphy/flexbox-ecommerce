@@ -38,7 +38,7 @@ public class User {
     @Column(name = "last_name", nullable = false, length = Integer.MAX_VALUE)
     private String lastName;
 
-    @Column(name = "phone_number", nullable = false, length = 15)
+    @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
     @ColumnDefault("false")

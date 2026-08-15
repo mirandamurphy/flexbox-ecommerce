@@ -1,7 +1,7 @@
 package com.flexbox.backend.catalog.controller;
 
-import com.flexbox.backend.catalog.product.response.CategorySummaryResponse;
-import com.flexbox.backend.catalog.product.response.ProductResponse;
+import com.flexbox.backend.catalog.product.dto.response.CategorySummaryResponse;
+import com.flexbox.backend.catalog.product.dto.response.ProductResponse;
 import com.flexbox.backend.catalog.exception.ProductNotFoundException;
 import com.flexbox.backend.catalog.product.controller.ProductController;
 import com.flexbox.backend.catalog.product.service.ProductService;

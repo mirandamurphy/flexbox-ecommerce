@@ -1,7 +1,7 @@
 package com.flexbox.backend.catalog.box.service;
 
-import com.flexbox.backend.catalog.dto.subscriptionbox.BoxDetailResponse;
-import com.flexbox.backend.catalog.dto.subscriptionbox.BoxSummaryResponse;
+import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxDetailResponse;
+import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxSummaryResponse;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxProductRepository;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxRepository;

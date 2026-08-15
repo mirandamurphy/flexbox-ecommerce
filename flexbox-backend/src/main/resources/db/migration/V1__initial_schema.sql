@@ -527,12 +527,6 @@ CREATE TRIGGER trg_order_updated_at
     FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
 
-CREATE TRIGGER trg_order_item_updated_at
-    BEFORE INSERT OR UPDATE
-    ON public.order_item
-    FOR EACH ROW
-EXECUTE FUNCTION public.set_updated_at();
-
 CREATE TRIGGER trg_payment_updated_at
     BEFORE INSERT OR UPDATE
     ON public.payment
