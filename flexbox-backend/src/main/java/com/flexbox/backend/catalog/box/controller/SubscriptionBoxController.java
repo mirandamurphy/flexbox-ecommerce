@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.box.controller;
 
-import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxResponse;
+import com.flexbox.backend.catalog.box.dto.BoxResponse;
 import com.flexbox.backend.catalog.box.service.SubscriptionBoxService;
 import com.flexbox.backend.common.dto.response.CollectionResponse;
 import org.springframework.http.ResponseEntity;

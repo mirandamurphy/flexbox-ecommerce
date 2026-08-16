@@ -1,6 +1,6 @@
 package com.flexbox.backend.catalog.box.service;
 
-import com.flexbox.backend.catalog.box.dto.subscriptionbox.BoxResponse;
+import com.flexbox.backend.catalog.box.dto.BoxResponse;
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
 import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;

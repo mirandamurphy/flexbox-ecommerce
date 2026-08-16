@@ -22,5 +22,10 @@ public class SubscriptionBoxProductCostId implements Serializable {
     @Column(name = "product_id")
     private Long productId;
 
+    protected SubscriptionBoxProductCostId() {}
 
+    public SubscriptionBoxProductCostId(Long subscriptionBoxId, Long productId) {
+        this.subscriptionBoxId = subscriptionBoxId;
+        this.productId = productId;
+    }
 }

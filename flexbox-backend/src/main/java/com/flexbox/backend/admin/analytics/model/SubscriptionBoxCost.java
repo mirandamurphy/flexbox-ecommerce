@@ -24,5 +24,16 @@ public class SubscriptionBoxCost {
     @Column(name = "box_cost", precision = 5, scale = 2)
     private BigDecimal boxCost;
 
+    protected SubscriptionBoxCost() {}
+
+    public SubscriptionBoxCost(
+            Long subscriptionBoxId,
+            String boxName,
+            BigDecimal boxCost
+    ) {
+        this.subscriptionBoxId = subscriptionBoxId;
+        this.boxName = boxName;
+        this.boxCost = boxCost;
+    }
 
 }

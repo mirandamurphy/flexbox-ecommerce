@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @Immutable
 @Table(name = "view_monthly_sales", schema = "public")
 public class MonthlySales {
+
     @EmbeddedId
     private MonthlySalesId id;
 
@@ -31,6 +32,24 @@ public class MonthlySales {
 
     @Column(name = "gross_profit")
     private BigDecimal grossProfit;
+
+    protected MonthlySales() {}
+
+    public MonthlySales(
+            MonthlySalesId id,
+            String boxName,
+            Long unitsSold,
+            BigDecimal grossRevenue,
+            BigDecimal productCost,
+            BigDecimal grossProfit) {
+
+        this.id = id;
+        this.boxName = boxName;
+        this.unitsSold = unitsSold;
+        this.grossRevenue = grossRevenue;
+        this.productCost = productCost;
+        this.grossProfit = grossProfit;
+    }
 
 
 }

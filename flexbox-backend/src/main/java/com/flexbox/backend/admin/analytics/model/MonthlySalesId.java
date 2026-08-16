@@ -23,5 +23,8 @@ public class MonthlySalesId implements Serializable {
     @Column(name = "subscription_box_id")
     private Long subscriptionBoxId;
 
+    protected MonthlySalesId() {}
 
+    public MonthlySalesId(OffsetDateTime month, Long boxId) {
+    }
 }
