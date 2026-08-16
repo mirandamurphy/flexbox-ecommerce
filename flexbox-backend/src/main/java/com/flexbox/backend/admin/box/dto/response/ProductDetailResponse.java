@@ -2,7 +2,7 @@ package com.flexbox.backend.admin.box.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexbox.backend.catalog.product.model.Product;
-import com.flexbox.backend.catalog.product.model.ProductInventory;
+
 
 import java.math.BigDecimal;
 
