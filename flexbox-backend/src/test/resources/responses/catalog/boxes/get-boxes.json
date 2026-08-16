@@ -5,7 +5,7 @@
       "name": "Running Box",
       "description": "A running box",
       "imageUrl": "/images/running_box.jpg",
-      "price": "29.99",
+      "price": 29.99,
       "currency": "CAD",
       "active": true
     },
@@ -14,7 +14,7 @@
       "name": "Yoga Box",
       "description": "A yoga box",
       "imageUrl": "/images/yoga_box.jpg",
-      "price": "39.99",
+      "price": 39.99,
       "currency": "CAD",
       "active": true
     }

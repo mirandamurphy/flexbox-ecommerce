@@ -13,6 +13,7 @@ INSERT INTO public."user" (user_id,
                            is_enabled,
                            created_at,
                            updated_at)
+OVERRIDING SYSTEM VALUE
 VALUES (47, NULL, 'asturley1a@irs.gov', '$2a$04$Pb0Zs.G.uSc.VBVwPuADEeGPdwVw44yy/3xaoG6kjzVBYSg0tP24G', 'Alene',
         'Sturley', '4179625496', TRUE, '2026-08-13 10:37:09.5865-03', '2026-08-13 10:37:09.5865-03'),
        (48, NULL, 'iseldon1b@canalblog.com', '$2a$04$tYYhwX8NVLgT82dZuUHlcOrZYq3nYWrfegqAlb8wQxJAGVhck.zkK', 'Ilyse',
@@ -168,6 +169,7 @@ INSERT INTO public.address (address_id,
                             created_at,
                             updated_at,
                             type)
+OVERRIDING SYSTEM VALUE
 VALUES (233, 1, NULL, '380', 'Chyna Plaza', NULL, 'Kitimat', 'BC', 'B9H 7N2', 'CA', TRUE, TRUE,
         '2026-08-13 11:16:13.401725-03', '2026-08-13 11:16:13.401725-03', 'SHIPPING'),
        (234, 2, NULL, '40', 'Howell Vista', NULL, 'Port Colborne', 'ON', 'E3K 1S0', 'CA', TRUE, TRUE,
@@ -305,6 +307,7 @@ INSERT INTO public.marketing_consent (consent_id,
                                       created_at,
                                       updated_at,
                                       action)
+OVERRIDING SYSTEM VALUE
 VALUES (1, 1, '2026-08-13 11:26:45.120433-03', '2026-08-13 11:26:45.120433-03', 'SUBSCRIBE'),
        (2, 2, '2026-08-13 11:26:45.120433-03', '2026-08-13 11:26:45.120433-03', 'SUBSCRIBE'),
        (3, 3, '2026-08-13 11:26:45.120433-03', '2026-08-13 11:26:45.120433-03', 'SUBSCRIBE'),

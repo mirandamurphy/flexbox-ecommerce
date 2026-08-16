@@ -20,7 +20,6 @@ FROM subscription_box sb
          JOIN category c ON p.category_id = c.category_id
 WHERE p.is_active = true;
 
-GRANT SELECT ON view_subscription_box_product_cost TO flexbox_app;
 
 -- 2. Subscription Box Cost View
 CREATE OR REPLACE VIEW view_subscription_box_cost AS
@@ -30,7 +29,6 @@ SELECT subscription_box_id,
 FROM view_subscription_box_product_cost
 GROUP BY subscription_box_id, box_name;
 
-GRANT SELECT ON view_subscription_box_cost TO flexbox_app;
 
 -- 3. Monthly Sales View
 CREATE OR REPLACE VIEW view_monthly_sales AS
@@ -59,9 +57,6 @@ SELECT date_trunc('month'::text, order_date) AS month,
        sum(revenue - product_cost)           AS gross_profit
 FROM sales
 GROUP BY (date_trunc('month'::text, order_date)), subscription_box_id, box_name;
-
-GRANT SELECT ON view_monthly_sales TO flexbox_app;
-
 
 -- Sync updated quantities
 INSERT INTO public.subscription_box_product (subscription_box_id, product_id, quantity)
