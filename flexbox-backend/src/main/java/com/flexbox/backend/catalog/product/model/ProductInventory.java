@@ -1,7 +1,9 @@
 package com.flexbox.backend.catalog.product.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Generated;
@@ -9,11 +11,13 @@ import org.hibernate.generator.EventType;
 
 import java.time.OffsetDateTime;
 
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "product_inventory", schema = "public", uniqueConstraints = {@UniqueConstraint(name = "product_inventory_product_id_key",
         columnNames = {"product_id"})})
+@NoArgsConstructor
 public class ProductInventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

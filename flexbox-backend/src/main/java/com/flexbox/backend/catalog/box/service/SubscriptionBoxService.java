@@ -57,6 +57,7 @@ public class SubscriptionBoxService {
 
         return new CollectionResponse<>(boxResponses);
     }
+
     @Transactional(readOnly = true)
     public BoxResponse getBoxById(Long id) {
 

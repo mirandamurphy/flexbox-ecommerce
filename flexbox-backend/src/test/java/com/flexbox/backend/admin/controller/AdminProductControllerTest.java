@@ -1,4 +1,4 @@
-package com.flexbox.backend.catalog.controller;
+package com.flexbox.backend.admin.controller;
 
 import com.flexbox.backend.admin.box.controller.AdminProductController;
 import com.flexbox.backend.admin.box.dto.response.CategoryResponse;

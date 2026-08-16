@@ -16,12 +16,10 @@ import org.springframework.stereotype.Service;
 public class AdminProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     private final ProductInventoryRepository inventoryRepository;
 
-    public AdminProductService(ProductRepository productRepository, CategoryRepository categoryRepository, ProductInventoryRepository inventoryRepository) {
+    public AdminProductService(ProductRepository productRepository, ProductInventoryRepository inventoryRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
         this.inventoryRepository = inventoryRepository;
     }
 
