@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
 public record AdminBoxPriceResponse(
         Long id,
         Long subscriptionBoxId,
-        String stripePriceId,
         @JsonProperty("price") BigDecimal amount,
         OffsetDateTime startsAt,
         OffsetDateTime endsAt) {
@@ -20,7 +19,6 @@ public record AdminBoxPriceResponse(
         return new AdminBoxPriceResponse(
                 price.getId(),
                 price.getSubscriptionBox().getId(),
-                price.getStripePriceId(),
                 price.getAmount(),
                 price.getStartsAt(),
                 price.getEndsAt()

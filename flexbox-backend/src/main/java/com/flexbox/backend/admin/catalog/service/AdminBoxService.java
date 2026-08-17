@@ -118,8 +118,6 @@ public class AdminBoxService {
         price.setStartsAt(request.startsAt());
         price.setEndsAt(request.endsAt());
 
-        // TODO: Optionally, Stipe price can be added here
-        //price.setStripePriceId("price12345");
 
         var savedBoxPrice = boxPriceRepository.save(price);
 
