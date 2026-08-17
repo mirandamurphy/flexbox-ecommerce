@@ -23,7 +23,7 @@ public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox
     @Query("""
            update SubscriptionBox s set s.isActive = :isActive where s.id = :id
            """)
-    boolean updateIsActiveById(
+    int updateIsActiveById(
             @Param("isActive") boolean isActive,
             @Param("id") Long id
     );

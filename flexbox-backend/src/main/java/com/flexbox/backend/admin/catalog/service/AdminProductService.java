@@ -52,7 +52,7 @@ public class AdminProductService {
 
     @Transactional
     public void deactivateProductById(Long productId) {
-        if(!productRepository.updateIsActiveById(false,productId)) {
+        if(productRepository.updateIsActiveById(false,productId) == 0) {
             throw new ResourceNotFoundException("Product not found with ID '%d'".formatted(productId));
         }
     }

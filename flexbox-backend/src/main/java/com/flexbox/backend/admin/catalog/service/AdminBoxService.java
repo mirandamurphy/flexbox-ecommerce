@@ -57,7 +57,7 @@ public class AdminBoxService {
     @Transactional
     public void deactivateBox(Long boxId) {
 
-        if (!boxRepository.updateIsActiveById(false, boxId)) {
+        if (boxRepository.updateIsActiveById(false, boxId) == 0) {
             throw new ResourceNotFoundException("Subscription box for id '%d' not found.".formatted(boxId));
         }
     }

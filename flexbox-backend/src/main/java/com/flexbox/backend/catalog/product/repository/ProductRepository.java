@@ -15,9 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Modifying
     @Query("update Product p set p.isActive = :isActive where p.id = :id")
-    boolean updateIsActiveById(
+    int updateIsActiveById(
             @Param("isActive")Boolean isActive, @Param("id") Long id);
-
 
     @NonNull
     @EntityGraph(attributePaths = "category")
