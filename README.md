@@ -1,121 +1,220 @@
 # Flexbox
 
-A full-stack subscription box e-commerce application. Customers browse subscription boxes, add them to a cart, check out through Stripe, and manage their orders. Built for CST8319, Group 5.
 
-## Tech Stack
+A full-stack subscription box e-commerce application built for **CST8319: Software Development Project**.
 
-**Backend:** Java 25, Spring Boot 4.1.0, PostgreSQL, Flyway, Spring Security, Stripe API, Docker Compose, Testcontainers, JUnit 5
+Customers can browse subscription boxes and products, manage their cart, complete checkout through Stripe, and manage their orders.
 
-**Frontend:** React 19, Vite, React Router, Axios
+## Documentation
+
+- [Database Documentation](docs/database/)
+- [Catalog API Documentation](docs/api/product-catalog-api.md)
+
+
+### Backend
+
+- Java 25
+- Spring Boot 4.1.0
+- PostgreSQL 18
+- Flyway
+- Spring Security
+- Stripe API
+- Docker Compose
+- Testcontainers
+- JUnit 5
+- Mockito
+
+### Frontend
+
+- React 19
+- Vite
+- React Router
+- Axios
 
 ## Project Structure
 
+```text
+flexbox/
+├── database/
+│   └── app-init/
+│
+├── docs/
+│   ├── api/
+│   └── database/
+│       └── schema/
+│
+├── flexbox-backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/flexbox/backend/
+│   │   │   └── resources/
+│   │   │       └── db/migration/
+│   │   └── test/
+│   │       ├── java/com/flexbox/backend/
+│   │       └── resources/
+│   └── pom.xml
+│
+├── http-requests/
+├── public/
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── data/
+│   ├── layouts/
+│   ├── pages/
+│   ├── routes/
+│   └── services/
+│
+├── .gitignore
+├── docker-compose.yml
+├── package.json
+├── vite.config.js
+└── README.md
 ```
-flexbox-backend/          Spring Boot backend
-  src/main/java/com/flexbox/backend/
-    auth/                 Login, registration
-    security/             JWT, password hashing, user details
-    user/                 User, Role, Token entities
-    cart/                 Cart, CartItem, cart service and controller
-    catalog/              Product, SubscriptionBox, catalog service and controller
-    order/                Order, CheckoutSession, checkout service and controller
-    payment/               Payment, Invoice entities
-    webhook/               Stripe webhook handling
-    address/               Address entity
-    marketing/             Newsletter, marketing consent
-    subscription/           Subscription plan
-    config/                 Global exception handling
-  src/main/resources/
-    db/migration/            Flyway schema migrations
-    application.properties   App configuration
-  src/test/                  Unit and integration tests
 
-src/                        React frontend (Vite)
-  pages/                    Page components
-  components/               Reusable UI components
-  context/                  Cart and Auth state
-  services/                 API client and per-feature service functions
 
-database/app-init/          Postgres role and permission setup scripts
-docker-compose.yaml         Local development environment
-.env.example                Environment variable template
+### Backend Package Structure
+
+```text
+com.flexbox.backend/
+├── address/          # Address management
+├── admin/
+│   ├── analytics/    # Admin analytics
+│   └── catalog/      # Admin catalog management
+├── auth/             # Authentication
+├── cart/             # Shopping cart
+├── catalog/
+│   ├── box/          # Subscription boxes
+│   └── product/      # Products
+├── common/            # Shared DTOs and exceptions
+├── config/            # Application configuration
+├── marketing/        # Marketing functionality
+├── order/             # Order management
+├── payment/           # Payment processing
+├── security/          # Spring Security configuration
+├── stripe/            # Stripe integration
+├── subscription/      # Subscription management
+├── user/              # User management
+└── webhook/           # Webhook handling
 ```
 
-## Running the Backend
+### Frontend Structure
+
+```text
+src/
+├── assets/            # Static assets
+├── components/        # Reusable UI components
+├── context/           # React context providers
+├── data/              # Frontend data and configuration
+├── layouts/           # Page layouts
+├── pages/              # Application pages
+├── routes/             # Client-side routing
+└── services/           # API and service integrations
+```
+
+
+## Getting Started
 
 ### Prerequisites
 
 - Java 25
+- Node.js 20+
 - Docker Desktop
-- A Stripe test account (free): https://dashboard.stripe.com/register
+- Stripe test account ([register here](https://dashboard.stripe.com/register))
 
-### Setup
+### Environment Configuration
 
-1. Copy the environment template and fill in real values:
+Copy the environment template:
 
-   ```
-   cp .env.example .env
-   ```
+```bash
+cp .env.example .env
+```
 
-   Set a database password of your choice, and add your Stripe test secret key from
-   https://dashboard.stripe.com/test/apikeys. `JWT_SECRET` can be any random string
-   at least 32 characters long.
+Configure the required environment variables in `.env`.
 
-2. Start the database and backend with Docker Compose:
+For Stripe test credentials, use the [Stripe API keys dashboard](https://dashboard.stripe.com/test/apikeys).
 
-   ```
-   docker compose up -d --build
-   ```
+`JWT_SECRET` should be a randomly generated secret of at least 32 characters.
 
-   This starts Postgres, runs the Flyway migrations automatically, and starts the
-   Spring Boot application on port 8080.
 
-3. To run the backend directly instead of through Docker (useful for active
-   development), start only the database first:
 
-   ```
-   docker compose up -d app-db
-   ```
+## Running the Application
 
-   Then run the backend from `flexbox-backend/`:
+### Option 1: Run Backend with Docker Compose
 
-   ```
-   ./mvnw spring-boot:run
-   ```
+From the project root:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+
+- PostgreSQL
+- Flyway database migrations
+- Spring Boot backend
+
+The backend is available at:
+
+```text
+http://localhost:8080
+```
+
+To run the containers in the background:
+
+```bash
+docker compose up -d --build
+```
+
+### Option 2: Run Backend Locally
+
+Start only PostgreSQL:
+
+```bash
+docker compose up -d app-db
+```
+
+Then run the backend from `flexbox-backend/`:
+
+```bash
+./mvnw spring-boot:run
+```
 
 ### Running Tests
 
 From `flexbox-backend/`:
 
-```
+```bash
 ./mvnw clean test
 ```
 
-Tests use Testcontainers, which starts its own throwaway Postgres container
-automatically. Docker must be running, but the app's own database does not need
-to be up first.
+Integration tests use **Testcontainers** to create a temporary PostgreSQL database. Docker must be running, but the application's PostgreSQL container does not need to be running.
 
 ## Running the Frontend
 
-### Prerequisites
-
-- Node.js 20+
-
-### Setup
-
 From the project root:
 
-```
+```bash
 npm install
 npm run dev
 ```
 
-The frontend runs on `http://localhost:3000` by default and expects the backend
-to be running on `http://localhost:8080`.
+The frontend runs at:
 
-To build for production:
-
+```text
+http://localhost:3000
 ```
+
+It expects the backend to be available at:
+
+```text
+http://localhost:8080
+```
+
+### Production Build
+
+```bash
 npm run build
 ```
 
@@ -123,29 +222,33 @@ npm run build
 
 The backend exposes REST endpoints under `/api`. Key endpoints:
 
-| Method | Path                            | Purpose                            |
-|--------|---------------------------------|------------------------------------|
-| GET    | `/api/products`                 | List products                      |
-| GET    | `/api/subscription-boxes`       | List subscription boxes            |
-| GET    | `/api/cart?userId={id}`         | Get the current user's active cart |
-| POST   | `/api/cart/items?userId={id}`   | Add an item to the cart            |
-| PATCH  | `/api/cart/items/{id}`          | Update an item's quantity          |
-| DELETE | `/api/cart/items/{id}`          | Remove an item from the cart       |
-| POST   | `/api/checkout?userId={id}`     | Start a Stripe checkout session    |
-| POST   | `/api/checkout/{orderId}/retry` | Retry a failed or expired checkout |
-| POST   | `/api/auth/register`            | Register a new account             |
-| POST   | `/api/auth/login`               | Log in                             |
+| Method | Path                                          | Purpose                                       |
+|--------|-----------------------------------------------|-----------------------------------------------|
+| GET    | `/api/catalog/boxes`                          | Get all boxes                                 |
+| GET    | `/api/catalog/boxes/{boxId}`                  | Get one box                                   |
+| GET    | `/api/admin/products`                         | Admin: get all products                       |
+| GET    | `/api/admin/products/{productId}`             | Admin: get one product                        |
+| GET    | `/api/admin/analytics/boxes`                  | Admin: get box costs                          |
+| GET    | `/api/admin/analytics/boxes/products`         | Admin: get product costs for boxes            |
+| GET    | `/api/admin/analytics/boxes/{boxId}/products` | Admin: get product costs for one box          |
+| GET    | `/api/admin/analytics/sales`                  | Admin: get monthly sales summary (all months) |
+| GET    | `/api/cart?userId={id}`                       | Get the current user's active cart            |
+| POST   | `/api/cart/items?userId={id}`                 | Add an item to the cart                       |
+| PATCH  | `/api/cart/items/{id}`                        | Update an item's quantity                     |
+| POST   | `/api/admin/boxes`                            | Admin: create a box                           |
+| POST   | `/api/admin/boxes/{boxId}/products`           | Admin: Add product to box                     |
+| POST   | `/api/admin/boxes/{boxId}/prices`             | Admin: Set box price                          |
+| POST   | `/api/checkout?userId={id}`                   | Start a Stripe checkout session               |
+| POST   | `/api/checkout/{orderId}/retry`               | Retry a failed or expired checkout            |
+| POST   | `/api/auth/register`                          | Register a new account                        |
+| POST   | `/api/auth/login`                             | Log in                                        |
+| DELETE | `/api/admin/boxes/{boxId}`                    | Admin: Deactive a box                         |
+| DELETE | `/api/admin/products/{productId}`             | Admin: Deactive a product                     |
+| DELETE | `/api/cart/items/{id}`                        | Remove an item from the cart                  |
 
-`userId` is currently passed as a request parameter rather than read from an
-authenticated session. The JWT security filter chain that would read it from
-the login token automatically is not wired up yet, this is a known next step.
 
-## Known Limitations (as of this submission)
-
-- The frontend uses mock data for cart and checkout, it is not yet connected
-  to the real backend endpoints listed above.
-- There is no JWT authentication filter enforcing login on protected routes yet.
-- Admin analytics endpoints are not implemented yet.
+For detailed API documentation, see:
+- [Catalog API Documentation](docs/api/product-catalog-api.md).
 
 ## Team
 
