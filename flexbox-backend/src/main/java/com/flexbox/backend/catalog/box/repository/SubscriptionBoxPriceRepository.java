@@ -11,12 +11,6 @@ import java.util.Optional;
 
 public interface SubscriptionBoxPriceRepository extends JpaRepository<SubscriptionBoxPrice, Long> {
 
-    /*
-    Fetches the entire SubscriptionBoxPrice entity where the price starts_at
-    is before OR equal to now and the price ends_at is greater than now.
-    This allows the ends_at price to be set in advance without affecting
-    finding the current subscription box price.
-     */
     @Query(
             """
             FROM SubscriptionBoxPrice p

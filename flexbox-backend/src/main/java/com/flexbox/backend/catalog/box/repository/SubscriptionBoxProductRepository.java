@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SubscriptionBoxProductRepository extends JpaRepository<SubscriptionBoxProduct, SubscriptionBoxProductId> {
 
-    List<SubscriptionBoxProduct> findAllBySubscriptionBoxId(Long id);
+
 }

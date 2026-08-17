@@ -28,5 +28,4 @@ public interface SubscriptionBoxRepository extends JpaRepository<SubscriptionBox
             @Param("id") Long id
     );
 
-
 }

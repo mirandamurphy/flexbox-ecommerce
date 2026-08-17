@@ -202,4 +202,5 @@ class SubscriptionBoxPriceRepositoryTest {
 
         assertThat(result).isEmpty();
     }
+
 }
