@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "subscriptionBoxId": 1,
+      "productId": 1,
+      "boxName": "Running Box",
+      "brand": "Sunny",
+      "productName": "Sunscreen",
+      "categoryId": 1,
+      "categoryName": "personal care",
+      "quantity": 1,
+      "productCost": 1.02
+    },
+    {
+      "subscriptionBoxId": 2,
+      "productId": 1,
+      "boxName": "Yoga Box",
+      "brand": "Sunny",
+      "productName": "Sunscreen",
+      "categoryId": 1,
+      "categoryName": "personal care",
+      "quantity": 3,
+      "productCost": 1.02
+    }
+  ]
+}
+

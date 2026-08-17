@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "subscriptionBoxId": 1,
+      "name": "Running Box",
+      "cost": 12.99
+    },
+    {
+      "subscriptionBoxId": 2,
+      "name": "Yoga Box",
+      "cost": 14.00
+    }
+  ]
+}

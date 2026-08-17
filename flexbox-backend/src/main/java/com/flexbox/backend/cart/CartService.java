@@ -3,9 +3,9 @@ package com.flexbox.backend.cart;
 import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartItem;
 import com.flexbox.backend.cart.model.CartStatus;
-import com.flexbox.backend.catalog.model.SubscriptionBox;
-import com.flexbox.backend.catalog.model.SubscriptionBoxPrice;
-import com.flexbox.backend.catalog.repository.SubscriptionBoxPriceRepository;
+import com.flexbox.backend.catalog.box.model.SubscriptionBox;
+import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
+import com.flexbox.backend.catalog.box.repository.SubscriptionBoxPriceRepository;
 import com.flexbox.backend.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ public class CartService {
                             + ", requested " + requestedTotal + " total");
         }
 
-        BigDecimal currentPrice = priceRepository.findActivePriceBySubscriptionBoxId(subscriptionBox.getId(), OffsetDateTime.now())
+        BigDecimal currentPrice = priceRepository.findCurrentPrice(subscriptionBox.getId(), OffsetDateTime.now())
                 .map(SubscriptionBoxPrice::getAmount)
                 .orElseThrow(() -> new IllegalStateException(
                         "No active price found for subscription box " + subscriptionBox.getId()));

@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "month": "2026-07-02T23:38:39.65765Z",
+      "subscriptionBoxId": 1,
+      "boxName": "Running Box",
+      "unitsSold": 123,
+      "grossRevenue": 5642.32,
+      "productCost": 2342.32,
+      "grossProfit": 3223.30
+    },
+    {
+      "month": "2026-08-02T23:38:39.65765Z",
+      "subscriptionBoxId": 1,
+      "boxName": "Running Box",
+      "unitsSold": 234,
+      "grossRevenue": 9944.33,
+      "productCost": 4422.42,
+      "grossProfit": 2312.32
+    }
+  ]
+}
