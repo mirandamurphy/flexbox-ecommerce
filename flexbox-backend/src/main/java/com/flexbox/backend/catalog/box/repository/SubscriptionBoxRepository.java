@@ -1,7 +1,6 @@
 package com.flexbox.backend.catalog.box.repository;
 
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
