@@ -2,16 +2,16 @@ package com.flexbox.backend.admin.catalog.dto.response;
 
 import com.flexbox.backend.catalog.box.model.SubscriptionBoxProduct;
 
-public record BoxProductResponse(
+public record AdminBoxProductResponse(
         Long subscriptionBoxId,
         Long productId,
         String productName,
         Integer quantity
 ) {
-    public static BoxProductResponse from(SubscriptionBoxProduct boxProduct) {
+    public static AdminBoxProductResponse from(SubscriptionBoxProduct boxProduct) {
         var product = boxProduct.getProduct();
 
-        return new BoxProductResponse(
+        return new AdminBoxProductResponse(
                 boxProduct.getSubscriptionBox().getId(),
                 product.getId(),
                 product.getName(),

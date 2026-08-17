@@ -6,7 +6,7 @@ import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public record BoxPriceResponse(
+public record AdminBoxPriceResponse(
         Long id,
         Long subscriptionBoxId,
         String stripePriceId,
@@ -14,10 +14,10 @@ public record BoxPriceResponse(
         OffsetDateTime startsAt,
         OffsetDateTime endsAt) {
 
-    public static BoxPriceResponse from(
+    public static AdminBoxPriceResponse from(
             SubscriptionBoxPrice price) {
 
-        return new BoxPriceResponse(
+        return new AdminBoxPriceResponse(
                 price.getId(),
                 price.getSubscriptionBox().getId(),
                 price.getStripePriceId(),

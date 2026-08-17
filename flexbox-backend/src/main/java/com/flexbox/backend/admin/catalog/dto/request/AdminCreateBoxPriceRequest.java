@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-public record CreateBoxPriceRequest(
+public record AdminCreateBoxPriceRequest(
         @NotNull
         @JsonProperty("price") @DecimalMin("0.01")BigDecimal amount,
         OffsetDateTime startsAt,

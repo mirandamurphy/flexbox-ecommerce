@@ -6,20 +6,20 @@ import com.flexbox.backend.catalog.product.model.Product;
 
 import java.math.BigDecimal;
 
-public record ProductDetailResponse(
+public record AdminProductDetailResponse(
         Long id,
         String sku,
         String brand,
         String name,
         String description,
-        CategoryResponse category,
+        AdminCategoryResponse category,
         @JsonProperty("active") Boolean isActive,
         BigDecimal costPerUnit,
-        ProductInventoryResponse inventory
+        AdminProductInventoryResponse inventory
         ){
 
-        public static ProductDetailResponse from(Product product, CategoryResponse category, ProductInventoryResponse inventory) {
-                return new ProductDetailResponse(
+        public static AdminProductDetailResponse from(Product product, AdminCategoryResponse category, AdminProductInventoryResponse inventory) {
+                return new AdminProductDetailResponse(
                         product.getId(),
                         product.getSku(),
                         product.getBrand(),

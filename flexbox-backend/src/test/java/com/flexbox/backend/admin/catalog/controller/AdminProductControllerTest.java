@@ -1,9 +1,9 @@
 package com.flexbox.backend.admin.catalog.controller;
 
-import com.flexbox.backend.admin.catalog.dto.response.CategoryResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductDetailResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductInventoryResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductSummaryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminCategoryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductDetailResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductInventoryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductSummaryResponse;
 import com.flexbox.backend.admin.catalog.service.AdminProductService;
 import com.flexbox.backend.common.dto.response.CollectionResponse;
 import com.flexbox.backend.common.exception.ResourceNotFoundException;
@@ -35,14 +35,14 @@ class AdminProductControllerTest {
     @Test
     void getProducts_shouldReturn200_whenProductsExist() {
 
-        var socks = new ProductSummaryResponse(
+        var socks = new AdminProductSummaryResponse(
                 1L,
                 "SKU-101",
                 "Socks",
                 true
         );
 
-        var sunscreen = new ProductSummaryResponse(
+        var sunscreen = new AdminProductSummaryResponse(
                 2L,
                 "SKU-102",
                 "Sunscreen",
@@ -67,18 +67,18 @@ class AdminProductControllerTest {
     @Test
     void getProductById_shouldReturn200_whenProductExists() {
 
-        var sunscreen = new ProductDetailResponse(
+        var sunscreen = new AdminProductDetailResponse(
                 2L,
                 "SKU-102",
                 "Sunny",
                 "Sunscreen",
                 "SPF 60 sunscreen",
-                new CategoryResponse(
+                new AdminCategoryResponse(
                         1L, "personal care"
                 ),
                 true,
                 BigDecimal.valueOf(1.01),
-                new ProductInventoryResponse(
+                new AdminProductInventoryResponse(
                         10, 2
                 )
         );
@@ -90,16 +90,16 @@ class AdminProductControllerTest {
         Long productId = 2L;
 
         given(adminProductService.getProductById(productId))
-                .willReturn(new ProductDetailResponse(
+                .willReturn(new AdminProductDetailResponse(
                         sunscreen.id(),
                         sunscreen.sku(),
                         sunscreen.brand(),
                         sunscreen.name(),
                         sunscreen.description(),
-                        new CategoryResponse(sunscreen.category().id(), sunscreen.category().name()),
+                        new AdminCategoryResponse(sunscreen.category().id(), sunscreen.category().name()),
                         sunscreen.isActive(),
                         sunscreen.costPerUnit(),
-                        new ProductInventoryResponse(sunscreen.inventory().inStock(),
+                        new AdminProductInventoryResponse(sunscreen.inventory().inStock(),
                                 sunscreen.inventory().reserved()
                         )
 

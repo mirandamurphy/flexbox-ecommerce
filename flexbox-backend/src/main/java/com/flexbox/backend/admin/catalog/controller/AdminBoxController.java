@@ -1,11 +1,11 @@
 package com.flexbox.backend.admin.catalog.controller;
 
-import com.flexbox.backend.admin.catalog.dto.request.CreateBoxRequest;
-import com.flexbox.backend.admin.catalog.dto.request.AddProductToBoxRequest;
-import com.flexbox.backend.admin.catalog.dto.response.BoxPriceResponse;
-import com.flexbox.backend.admin.catalog.dto.response.BoxProductResponse;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxRequest;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxProductRequest;
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxPriceResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxProductResponse;
 import com.flexbox.backend.admin.catalog.dto.response.AdminBoxResponse;
-import com.flexbox.backend.admin.catalog.dto.request.CreateBoxPriceRequest;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxPriceRequest;
 import com.flexbox.backend.admin.catalog.service.AdminBoxService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class AdminBoxController {
 
     @PostMapping
     public ResponseEntity<AdminBoxResponse> createBox(
-            @Valid @RequestBody CreateBoxRequest request) {
+            @Valid @RequestBody AdminCreateBoxRequest request) {
         var box = adminBoxService.createBox(request);
 
         var location = ServletUriComponentsBuilder
@@ -47,9 +47,9 @@ public class AdminBoxController {
     }
 
     @PostMapping("/{boxId}/products")
-    public ResponseEntity<BoxProductResponse> addBoxProduct (
+    public ResponseEntity<AdminBoxProductResponse> addBoxProduct (
             @PathVariable Long boxId,
-            @Valid @RequestBody AddProductToBoxRequest request) {
+            @Valid @RequestBody AdminCreateBoxProductRequest request) {
 
         var boxProduct = adminBoxService.createBoxProduct(boxId,request);
         var location = ServletUriComponentsBuilder
@@ -58,13 +58,13 @@ public class AdminBoxController {
                 .buildAndExpand(boxProduct.getProduct().getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(BoxProductResponse.from(boxProduct));
+        return ResponseEntity.created(location).body(AdminBoxProductResponse.from(boxProduct));
     }
 
     @PostMapping("/{boxId}/prices")
-    public ResponseEntity<BoxPriceResponse> setBoxPrice (
+    public ResponseEntity<AdminBoxPriceResponse> setBoxPrice (
             @PathVariable Long boxId,
-            @Valid @RequestBody CreateBoxPriceRequest request) {
+            @Valid @RequestBody AdminCreateBoxPriceRequest request) {
 
         var boxPrice = adminBoxService.setBoxPrice(boxId, request);
 
@@ -74,7 +74,7 @@ public class AdminBoxController {
                 .buildAndExpand(boxPrice.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(BoxPriceResponse.from(boxPrice));
+        return ResponseEntity.created(location).body(AdminBoxPriceResponse.from(boxPrice));
     }
 
 

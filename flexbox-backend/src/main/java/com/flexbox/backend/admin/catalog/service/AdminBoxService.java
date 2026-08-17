@@ -1,11 +1,12 @@
 package com.flexbox.backend.admin.catalog.service;
 
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxResponse;
 import com.flexbox.backend.common.exception.BusinessRuleException;
 import com.flexbox.backend.common.exception.ResourceAlreadyExistsException;
 import com.flexbox.backend.common.exception.ResourceNotFoundException;
-import com.flexbox.backend.admin.catalog.dto.request.AddProductToBoxRequest;
-import com.flexbox.backend.admin.catalog.dto.request.CreateBoxPriceRequest;
-import com.flexbox.backend.admin.catalog.dto.request.CreateBoxRequest;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxProductRequest;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxPriceRequest;
+import com.flexbox.backend.admin.catalog.dto.request.AdminCreateBoxRequest;
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 import com.flexbox.backend.catalog.box.model.SubscriptionBoxPrice;
 import com.flexbox.backend.catalog.box.model.SubscriptionBoxProduct;
@@ -32,10 +33,11 @@ public class AdminBoxService {
         this.boxPriceRepository = boxPriceRepository;
     }
 
-    public SubscriptionBox createBox(CreateBoxRequest request) {
+    public AdminBoxResponse createBox(AdminCreateBoxRequest request) {
 
         if(boxRepository.existsByNameIgnoreCase(request.name())) {
-            throw new ResourceAlreadyExistsException("A subscription box with the name '%s' already exists.".formatted(request.name()));
+            throw new ResourceAlreadyExistsException(
+                    "A subscription box with the name '%s' already exists.".formatted(request.name()));
         }
 
         var box = new SubscriptionBox();
@@ -45,7 +47,9 @@ public class AdminBoxService {
         box.setAvailableUnits(request.availableUnits());
         box.setIsActive(request.isActive());
 
-        return boxRepository.save(box);
+        var savedBox = boxRepository.save(box);
+
+        return AdminBoxResponse.from(savedBox);
     }
 
     @Transactional
@@ -58,7 +62,7 @@ public class AdminBoxService {
 
 
     @Transactional
-    public SubscriptionBoxProduct createBoxProduct(Long boxId, AddProductToBoxRequest request) {
+    public SubscriptionBoxProduct createBoxProduct(Long boxId, AdminCreateBoxProductRequest request) {
 
         var box = boxRepository.findById(boxId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -97,7 +101,7 @@ public class AdminBoxService {
     }
 
     @Transactional
-    public SubscriptionBoxPrice setBoxPrice(Long boxId, CreateBoxPriceRequest request) {
+    public SubscriptionBoxPrice setBoxPrice(Long boxId, AdminCreateBoxPriceRequest request) {
 
         var box = boxRepository.findById(boxId)
                 .orElseThrow(() -> new ResourceNotFoundException(

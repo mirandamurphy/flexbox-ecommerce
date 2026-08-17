@@ -1,9 +1,9 @@
 package com.flexbox.backend.admin.catalog.service;
 
-import com.flexbox.backend.admin.catalog.dto.response.CategoryResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductDetailResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductInventoryResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductSummaryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminCategoryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductDetailResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductInventoryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductSummaryResponse;
 import com.flexbox.backend.catalog.product.repository.ProductInventoryRepository;
 import com.flexbox.backend.catalog.product.repository.ProductRepository;
 import com.flexbox.backend.common.dto.response.CollectionResponse;
@@ -23,10 +23,10 @@ public class AdminProductService {
     }
 
     @Transactional(readOnly = true)
-    public CollectionResponse<ProductSummaryResponse> getProducts() {
+    public CollectionResponse<AdminProductSummaryResponse> getProducts() {
         var products = productRepository.findAll()
                 .stream()
-                .map(ProductSummaryResponse::from)
+                .map(AdminProductSummaryResponse::from)
                 .toList();
 
         return new CollectionResponse<>(products);
@@ -34,20 +34,20 @@ public class AdminProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductDetailResponse getProductById(Long productId) {
+    public AdminProductDetailResponse getProductById(Long productId) {
         var product = productRepository.findById(productId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Product not found with ID '%d'".formatted(productId)));
 
         var inventory = inventoryRepository.findByProduct_Id(productId)
                 .map(
-                        inv -> new ProductInventoryResponse(inv.getInStock(), inv.getReserved()))
-                .orElse(new ProductInventoryResponse(0, 0));
+                        inv -> new AdminProductInventoryResponse(inv.getInStock(), inv.getReserved()))
+                .orElse(new AdminProductInventoryResponse(0, 0));
 
         var category = product.getCategory();
 
-        return ProductDetailResponse.from(product,
-                new CategoryResponse(category.getId(), category.getName()), inventory);
+        return AdminProductDetailResponse.from(product,
+                new AdminCategoryResponse(category.getId(), category.getName()), inventory);
     }
 
     @Transactional

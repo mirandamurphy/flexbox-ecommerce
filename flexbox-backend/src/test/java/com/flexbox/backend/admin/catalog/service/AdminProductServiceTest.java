@@ -1,10 +1,9 @@
 package com.flexbox.backend.admin.catalog.service;
 
-import com.flexbox.backend.admin.catalog.dto.response.ProductDetailResponse;
-import com.flexbox.backend.admin.catalog.dto.response.ProductSummaryResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductDetailResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminProductSummaryResponse;
 import com.flexbox.backend.catalog.product.model.Category;
 import com.flexbox.backend.catalog.product.model.Product;
-import com.flexbox.backend.admin.catalog.service.AdminProductService;
 import com.flexbox.backend.catalog.product.model.ProductInventory;
 import com.flexbox.backend.catalog.product.repository.ProductInventoryRepository;
 import com.flexbox.backend.catalog.product.repository.ProductRepository;
@@ -98,7 +97,7 @@ class AdminProductServiceTest {
 
         assertThat(result.items()).isNotEmpty().hasSize(2);
         assertThat(result.items())
-                .extracting(ProductSummaryResponse::id)
+                .extracting(AdminProductSummaryResponse::id)
                         .containsExactly(sunscreen.getId(), socks.getId());
 
         verify(productRepository).findAll();
@@ -118,7 +117,7 @@ class AdminProductServiceTest {
         var result = adminProductService.getProductById(productId);
 
         assertThat(result).isNotNull()
-                .isExactlyInstanceOf(ProductDetailResponse.class);
+                .isExactlyInstanceOf(AdminProductDetailResponse.class);
 
         assertThat(result.id()).isEqualTo(2L);
         assertThat(result.brand()).isEqualTo("Sunny");
