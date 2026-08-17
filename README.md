@@ -7,7 +7,7 @@ Customers can browse subscription boxes and products, manage their cart, complet
 
 ## Documentation
 
-- [Database Documentation](docs/database/)
+- [Database Documentation](docs/database/DATABASE_README.md)
 - [Catalog API Documentation](docs/api/product-catalog-api.md)
 
 
