@@ -26,15 +26,16 @@ public class AdminBoxController {
     @PostMapping
     public ResponseEntity<AdminBoxResponse> createBox(
             @Valid @RequestBody AdminCreateBoxRequest request) {
+
         var box = adminBoxService.createBox(request);
 
         var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{boxId}")
-                .buildAndExpand(box.getId())
+                .buildAndExpand(box.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(AdminBoxResponse.from(box));
+        return ResponseEntity.created(location).body(box);
     }
 
     @DeleteMapping("/{boxId}")
@@ -52,13 +53,14 @@ public class AdminBoxController {
             @Valid @RequestBody AdminCreateBoxProductRequest request) {
 
         var boxProduct = adminBoxService.createBoxProduct(boxId,request);
+
         var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{productId}")
-                .buildAndExpand(boxProduct.getProduct().getId())
+                .buildAndExpand(boxProduct.productId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(AdminBoxProductResponse.from(boxProduct));
+        return ResponseEntity.created(location).body(boxProduct);
     }
 
     @PostMapping("/{boxId}/prices")
@@ -71,10 +73,10 @@ public class AdminBoxController {
         var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{priceId}")
-                .buildAndExpand(boxPrice.getId())
+                .buildAndExpand(boxPrice.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(AdminBoxPriceResponse.from(boxPrice));
+        return ResponseEntity.created(location).body(boxPrice);
     }
 
 
