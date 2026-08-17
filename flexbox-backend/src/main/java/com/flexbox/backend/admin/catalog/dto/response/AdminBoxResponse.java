@@ -1,13 +1,14 @@
 package com.flexbox.backend.admin.catalog.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 
 public record AdminBoxResponse(
         Long id,
         String name,
         String description,
-        String imageFile,
+        @JsonProperty("imagePath") String imageFile,
         Integer availableUnits,
         Boolean isActive
 ) {

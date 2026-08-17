@@ -3,13 +3,13 @@
   "sku": "SKU-102",
   "brand": "Sunny",
   "name": "Sunscreen",
-  "description": "SPF 6 sunscreen",
+  "description": "SPF 60 sunscreen",
   "category": {
     "id": 1,
     "name": "personal care"
   },
-  "active": "true",
-  "costPerUnit": "1.01",
+  "active": true,
+  "costPerUnit": 1.01,
   "inventory": {
     "inStock": 10,
     "reserved": 2

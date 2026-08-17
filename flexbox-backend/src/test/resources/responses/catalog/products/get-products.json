@@ -4,13 +4,13 @@
       "id": 1,
       "sku": "SKU-101",
       "name": "Socks",
-      "active": "true"
+      "active": true
     },
     {
       "id": 2,
       "sku": "SKU-102",
       "name": "Sunscreen",
-      "active": "true"
+      "active": true
     }
   ]
 }

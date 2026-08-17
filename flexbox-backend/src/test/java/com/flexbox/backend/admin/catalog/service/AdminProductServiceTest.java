@@ -39,7 +39,7 @@ class AdminProductServiceTest {
 
     private Product sunscreen;
     private Product socks;
-    private ProductInventory sunscreenInventory;
+    private ProductInventory productInventory;
 
     private static final OffsetDateTime CURRENT_TIME = OffsetDateTime.of(
             2026, 8, 2, 23, 38, 39, 657_650_000, ZoneOffset.UTC
@@ -77,13 +77,13 @@ class AdminProductServiceTest {
         socks.setCreatedAt(CURRENT_TIME.plusDays(1)); // Aug 2nd 2026
         socks.setUpdatedAt(CURRENT_TIME.plusDays(1)); // Aug 2nd 2026
 
-        sunscreenInventory = new ProductInventory();
-        sunscreenInventory.setId(1L);
-        sunscreenInventory.setProduct(sunscreen);
-        sunscreenInventory.setInStock(10);
-        sunscreenInventory.setReserved(2);
-        sunscreenInventory.setCreatedAt(CURRENT_TIME.plusDays(1));
-        sunscreenInventory.setUpdatedAt(CURRENT_TIME.plusDays(2));
+        productInventory = new ProductInventory();
+        productInventory.setId(1L);
+        productInventory.setProduct(sunscreen);
+        productInventory.setInStock(10);
+        productInventory.setReserved(2);
+        productInventory.setCreatedAt(CURRENT_TIME.plusDays(1));
+        productInventory.setUpdatedAt(CURRENT_TIME.plusDays(2));
 
     }
 
@@ -112,7 +112,7 @@ class AdminProductServiceTest {
                 .willReturn(Optional.of(sunscreen));
 
         given(inventoryRepository.findByProduct_Id(productId))
-                .willReturn(Optional.of(sunscreenInventory));
+                .willReturn(Optional.of(productInventory));
 
         var result = adminProductService.getProductById(productId);
 

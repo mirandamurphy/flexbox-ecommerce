@@ -123,18 +123,18 @@ npm run build
 
 The backend exposes REST endpoints under `/api`. Key endpoints:
 
-| Method | Path | Purpose |
-|---|---|---|
-| GET | `/api/products` | List products |
-| GET | `/api/subscription-boxes` | List subscription boxes |
-| GET | `/api/cart?userId={id}` | Get the current user's active cart |
-| POST | `/api/cart/items?userId={id}` | Add an item to the cart |
-| PATCH | `/api/cart/items/{id}` | Update an item's quantity |
-| DELETE | `/api/cart/items/{id}` | Remove an item from the cart |
-| POST | `/api/checkout?userId={id}` | Start a Stripe checkout session |
-| POST | `/api/checkout/{orderId}/retry` | Retry a failed or expired checkout |
-| POST | `/api/auth/register` | Register a new account |
-| POST | `/api/auth/login` | Log in |
+| Method | Path                            | Purpose                            |
+|--------|---------------------------------|------------------------------------|
+| GET    | `/api/products`                 | List products                      |
+| GET    | `/api/subscription-boxes`       | List subscription boxes            |
+| GET    | `/api/cart?userId={id}`         | Get the current user's active cart |
+| POST   | `/api/cart/items?userId={id}`   | Add an item to the cart            |
+| PATCH  | `/api/cart/items/{id}`          | Update an item's quantity          |
+| DELETE | `/api/cart/items/{id}`          | Remove an item from the cart       |
+| POST   | `/api/checkout?userId={id}`     | Start a Stripe checkout session    |
+| POST   | `/api/checkout/{orderId}/retry` | Retry a failed or expired checkout |
+| POST   | `/api/auth/register`            | Register a new account             |
+| POST   | `/api/auth/login`               | Log in                             |
 
 `userId` is currently passed as a request parameter rather than read from an
 authenticated session. The JWT security filter chain that would read it from
@@ -149,9 +149,9 @@ the login token automatically is not wired up yet, this is a known next step.
 
 ## Team
 
-| Role | Member |
-|---|---|
-| Data Engineer | Miranda Murphy |
-| Security Engineer | Nancy Mikhail |
-| Frontend Engineer | Yanzhen Zhang |
+| Role                 | Member           |
+|----------------------|------------------|
+| Data Engineer        | Miranda Murphy   |
+| Security Engineer    | Nancy Mikhail    |
+| Frontend Engineer    | Yanzhen Zhang    |
 | Integration Engineer | Nabil Ait Belkas |

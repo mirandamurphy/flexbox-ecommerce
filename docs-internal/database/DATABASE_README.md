@@ -91,15 +91,15 @@ Example workflow:
 docker compose stop
 ```
 
-2. Containers stop.
-3. Volume remains.
-4. Start containers:
+1. Containers stop.
+2. Volume remains.
+3. Start containers:
 
 ```bash
 docker compose up
 ```
 
-5. Existing database data is restored.
+1. Existing database data is restored.
 
 The database volume is only removed when explicitly deleted.
 

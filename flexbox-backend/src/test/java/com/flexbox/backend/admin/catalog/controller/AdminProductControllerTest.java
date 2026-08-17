@@ -109,7 +109,7 @@ class AdminProductControllerTest {
         assertThat(
                 mockMvcTester
                 .get()
-                .uri("api/admin/products/2"))
+                .uri("/api/admin/products/2"))
                 .hasStatusOk()
                 .bodyJson()
                 .isLenientlyEqualTo(expected);
@@ -169,7 +169,7 @@ class AdminProductControllerTest {
 
         var result  = mockMvcTester
                 .delete()
-                .uri("api/admin/products/1")
+                .uri("/api/admin/products/1")
                 .exchange();
 
         assertThat(result)

@@ -26,5 +26,7 @@ public class MonthlySalesId implements Serializable {
     protected MonthlySalesId() {}
 
     public MonthlySalesId(OffsetDateTime month, Long boxId) {
+        this.month = month;
+        this.subscriptionBoxId = boxId;
     }
 }

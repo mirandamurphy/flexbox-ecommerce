@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 
 public record AdminCreateBoxPriceRequest(
         @NotNull
-        @JsonProperty("price") @DecimalMin("0.01")BigDecimal amount,
+        @JsonProperty("price") BigDecimal amount,
         OffsetDateTime startsAt,
         OffsetDateTime endsAt
         ) {
