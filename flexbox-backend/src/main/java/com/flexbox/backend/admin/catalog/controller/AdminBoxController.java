@@ -4,7 +4,7 @@ import com.flexbox.backend.admin.catalog.dto.request.CreateBoxRequest;
 import com.flexbox.backend.admin.catalog.dto.request.AddProductToBoxRequest;
 import com.flexbox.backend.admin.catalog.dto.response.BoxPriceResponse;
 import com.flexbox.backend.admin.catalog.dto.response.BoxProductResponse;
-import com.flexbox.backend.admin.catalog.dto.response.BoxResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxResponse;
 import com.flexbox.backend.admin.catalog.dto.request.CreateBoxPriceRequest;
 import com.flexbox.backend.admin.catalog.service.AdminBoxService;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class AdminBoxController {
     }
 
     @PostMapping
-    public ResponseEntity<BoxResponse> createBox(
+    public ResponseEntity<AdminBoxResponse> createBox(
             @Valid @RequestBody CreateBoxRequest request) {
         var box = adminBoxService.createBox(request);
 
@@ -34,7 +34,7 @@ public class AdminBoxController {
                 .buildAndExpand(box.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(BoxResponse.from(box));
+        return ResponseEntity.created(location).body(AdminBoxResponse.from(box));
     }
 
     @DeleteMapping("/{boxId}")

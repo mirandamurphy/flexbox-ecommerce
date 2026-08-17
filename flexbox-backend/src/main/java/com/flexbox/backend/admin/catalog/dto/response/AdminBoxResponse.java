@@ -3,7 +3,7 @@ package com.flexbox.backend.admin.catalog.dto.response;
 
 import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 
-public record BoxResponse(
+public record AdminBoxResponse(
         Long id,
         String name,
         String description,
@@ -12,8 +12,8 @@ public record BoxResponse(
         Boolean isActive
 ) {
 
-    public static BoxResponse from(SubscriptionBox box) {
-        return new BoxResponse(
+    public static AdminBoxResponse from(SubscriptionBox box) {
+        return new AdminBoxResponse(
                 box.getId(),
                 box.getName(),
                 box.getDescription(),
