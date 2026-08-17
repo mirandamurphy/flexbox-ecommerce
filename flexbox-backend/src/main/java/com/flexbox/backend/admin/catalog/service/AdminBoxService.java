@@ -1,5 +1,7 @@
 package com.flexbox.backend.admin.catalog.service;
 
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxPriceResponse;
+import com.flexbox.backend.admin.catalog.dto.response.AdminBoxProductResponse;
 import com.flexbox.backend.admin.catalog.dto.response.AdminBoxResponse;
 import com.flexbox.backend.common.exception.BusinessRuleException;
 import com.flexbox.backend.common.exception.ResourceAlreadyExistsException;
@@ -62,7 +64,7 @@ public class AdminBoxService {
 
 
     @Transactional
-    public SubscriptionBoxProduct createBoxProduct(Long boxId, AdminCreateBoxProductRequest request) {
+    public AdminBoxProductResponse createBoxProduct(Long boxId, AdminCreateBoxProductRequest request) {
 
         var box = boxRepository.findById(boxId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -97,11 +99,13 @@ public class AdminBoxService {
         boxProduct.setProduct(product);
         boxProduct.setQuantity(request.quantity());
 
-        return boxProductRepository.save(boxProduct);
+       var savedBoxProduct = boxProductRepository.save(boxProduct);
+
+       return AdminBoxProductResponse.from(savedBoxProduct);
     }
 
     @Transactional
-    public SubscriptionBoxPrice setBoxPrice(Long boxId, AdminCreateBoxPriceRequest request) {
+    public AdminBoxPriceResponse setBoxPrice(Long boxId, AdminCreateBoxPriceRequest request) {
 
         var box = boxRepository.findById(boxId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -114,10 +118,12 @@ public class AdminBoxService {
         price.setStartsAt(request.startsAt());
         price.setEndsAt(request.endsAt());
 
-        // TODO: Stipe price can be added here
-        price.setStripePriceId("price12345");
+        // TODO: Optionally, Stipe price can be added here
+        //price.setStripePriceId("price12345");
 
-        return boxPriceRepository.save(price);
+        var savedBoxPrice = boxPriceRepository.save(price);
+
+        return AdminBoxPriceResponse.from(savedBoxPrice);
     }
 
 
