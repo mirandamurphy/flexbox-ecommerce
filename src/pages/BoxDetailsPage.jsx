@@ -1,21 +1,60 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import mockBoxes from "../data/mockBoxes";
 import { useCart } from "../context/CartContext";
+import { getBoxById } from "../services/boxService";
 
 function BoxDetailsPage() {
   const { id } = useParams();
   const { addToCart } = useCart();
 
-  const box = mockBoxes.find(
-    (item) => item.id === Number(id)
-  );
+  const [box, setBox] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  if (!box) {
+  useEffect(() => {
+    async function loadBox() {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        const response = await getBoxById(id);
+        setBox(response.data);
+      } catch (apiError) {
+        const message =
+          apiError.response?.data?.detail ||
+          apiError.message ||
+          "Unable to load subscription box.";
+
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadBox();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <main className="page">
+        <p>Loading subscription box...</p>
+      </main>
+    );
+  }
+
+  if (error || !box) {
     return (
       <main className="page">
         <h1>Subscription Box Not Found</h1>
-        <Link to="/boxes">Back to Boxes</Link>
+
+        {error && (
+          <p className="error-message">{error}</p>
+        )}
+
+        <Link to="/boxes">
+          Back to Boxes
+        </Link>
       </main>
     );
   }
@@ -23,25 +62,30 @@ function BoxDetailsPage() {
   return (
     <main className="page">
       <section className="box-details">
-        <p className="box-card__category">
-          {box.category}
-        </p>
-
         <h1>{box.name}</h1>
 
         <p>{box.description}</p>
 
         <p className="box-card__price">
-          ${box.price.toFixed(2)} / month
+          {box.currency} ${Number(box.price).toFixed(2)}
         </p>
 
-        <p>Stock available: {box.stock}</p>
+        <p>
+          Status: {box.active ? "Available" : "Unavailable"}
+        </p>
+
+        {box.imageUrl && (
+          <img
+            src={box.imageUrl}
+            alt={box.name}
+          />
+        )}
 
         <button
           className="primary-button"
           type="button"
           onClick={() => addToCart(box)}
-          disabled={box.stock <= 0}
+          disabled={!box.active}
         >
           Add to Cart
         </button>

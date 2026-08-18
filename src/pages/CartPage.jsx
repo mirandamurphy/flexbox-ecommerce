@@ -32,7 +32,10 @@ function CartPage() {
           <article className="cart-item" key={item.id}>
             <div>
               <h2>{item.name}</h2>
-              <p>${item.price.toFixed(2)} each</p>
+
+              <p>
+                ${Number(item.price).toFixed(2)} each
+              </p>
             </div>
 
             <label>
@@ -40,7 +43,6 @@ function CartPage() {
               <input
                 type="number"
                 min="1"
-                max={item.stock}
                 value={item.quantity}
                 onChange={(event) =>
                   updateQuantity(
@@ -52,7 +54,10 @@ function CartPage() {
             </label>
 
             <p>
-              ${(item.price * item.quantity).toFixed(2)}
+              $
+              {(
+                Number(item.price) * item.quantity
+              ).toFixed(2)}
             </p>
 
             <button
@@ -66,7 +71,9 @@ function CartPage() {
       </section>
 
       <section className="cart-summary">
-        <h2>Total: ${cartTotal.toFixed(2)}</h2>
+        <h2>
+          Total: ${Number(cartTotal).toFixed(2)}
+        </h2>
 
         <Link className="primary-button" to="/checkout">
           Proceed to Checkout

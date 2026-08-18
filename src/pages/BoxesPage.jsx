@@ -1,22 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SubscriptionBoxCard from "../components/SubscriptionBoxCard";
-import mockBoxes from "../data/mockBoxes";
+import { getBoxes } from "../services/boxService";
 
 function BoxesPage() {
+  const [boxes, setBoxes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredBoxes = mockBoxes.filter((box) => {
-    const matchesSearch = box.name
+  useEffect(() => {
+    async function loadBoxes() {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        const response = await getBoxes();
+
+        setBoxes(response.data.data || []);
+      } catch (apiError) {
+        const message =
+          apiError.response?.data?.detail ||
+          apiError.message ||
+          "Unable to load subscription boxes.";
+
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadBoxes();
+  }, []);
+
+  const filteredBoxes = boxes.filter((box) =>
+    box.name
       .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-
-    const matchesCategory =
-      category === "All" || box.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
+      .includes(searchTerm.toLowerCase())
+  );
 
   return (
     <main className="page">
@@ -32,32 +53,34 @@ function BoxesPage() {
           type="search"
           placeholder="Search subscription boxes..."
           value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
+          onChange={(event) =>
+            setSearchTerm(event.target.value)
+          }
         />
-
-        <select
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-        >
-          <option value="All">All Categories</option>
-          <option value="Performance">Performance</option>
-          <option value="Wellness">Wellness</option>
-          <option value="Beginner">Beginner</option>
-        </select>
       </section>
 
-      <section className="box-grid">
-        {filteredBoxes.length > 0 ? (
-          filteredBoxes.map((box) => (
-            <SubscriptionBoxCard
-              key={box.id}
-              box={box}
-            />
-          ))
-        ) : (
-          <p>No subscription boxes found.</p>
-        )}
-      </section>
+      {isLoading && (
+        <p>Loading subscription boxes...</p>
+      )}
+
+      {error && (
+        <p className="error-message">{error}</p>
+      )}
+
+      {!isLoading && !error && (
+        <section className="box-grid">
+          {filteredBoxes.length > 0 ? (
+            filteredBoxes.map((box) => (
+              <SubscriptionBoxCard
+                key={box.id}
+                box={box}
+              />
+            ))
+          ) : (
+            <p>No subscription boxes found.</p>
+          )}
+        </section>
+      )}
     </main>
   );
 }
