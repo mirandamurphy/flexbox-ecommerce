@@ -1,5 +1,6 @@
 package com.flexbox.backend.webhook;
 
+import com.flexbox.backend.email.EmailService;
 import com.flexbox.backend.order.CheckoutSession;
 import com.flexbox.backend.order.CheckoutSessionRepository;
 import com.flexbox.backend.order.CheckoutSessionStatus;
@@ -25,15 +26,18 @@ public class WebhookService {
     private final WebhookEventRepository webhookEventRepository;
     private final CheckoutSessionRepository checkoutSessionRepository;
     private final OrderRepository orderRepository;
+    private final EmailService emailService;
 
     public WebhookService(@Value("${stripe.api.webhook-secret}") String webhookSecret,
                            WebhookEventRepository webhookEventRepository,
                            CheckoutSessionRepository checkoutSessionRepository,
-                           OrderRepository orderRepository) {
+                           OrderRepository orderRepository,
+                           EmailService emailService) {
         this.webhookSecret = webhookSecret;
         this.webhookEventRepository = webhookEventRepository;
         this.checkoutSessionRepository = checkoutSessionRepository;
         this.orderRepository = orderRepository;
+        this.emailService = emailService;
     }
 
     public com.stripe.model.Event verifySignature(String payload, String signatureHeader)
@@ -43,17 +47,24 @@ public class WebhookService {
 
     @Transactional
     public void handleEvent(com.stripe.model.Event event) {
-        if (webhookEventRepository.findByStripeEventId(event.getId()).isPresent()) {
+        WebhookEvent webhookEvent = webhookEventRepository.findByStripeEventId(event.getId())
+                .orElseGet(() -> {
+                    WebhookEvent newEvent = new WebhookEvent();
+                    newEvent.setStripeEventId(event.getId());
+                    newEvent.setEventType(event.getType());
+                    newEvent.setPayload(Map.of("raw", event.toJson()));
+                    newEvent.setIsProcessed(false);
+                    newEvent.setReceivedAt(OffsetDateTime.now());
+                    return webhookEventRepository.save(newEvent);
+                });
+
+        // Only skip if this event was already successfully processed. An
+        // event that exists but never finished (isProcessed still false, from
+        // a prior attempt that threw partway through) gets retried here
+        // instead of silently skipped, since Stripe will keep resending it.
+        if (Boolean.TRUE.equals(webhookEvent.getIsProcessed())) {
             return;
         }
-
-        WebhookEvent webhookEvent = new WebhookEvent();
-        webhookEvent.setStripeEventId(event.getId());
-        webhookEvent.setEventType(event.getType());
-        webhookEvent.setPayload(Map.of("raw", event.toJson()));
-        webhookEvent.setIsProcessed(false);
-        webhookEvent.setReceivedAt(OffsetDateTime.now());
-        webhookEvent = webhookEventRepository.save(webhookEvent);
 
         switch (event.getType()) {
             case "checkout.session.completed" -> handleCheckoutCompleted(event);
@@ -91,6 +102,8 @@ public class WebhookService {
         orderRepository.save(order);
 
         checkoutSessionRepository.save(checkoutSession);
+
+        emailService.sendOrderConfirmation(order);
     }
 
     private void handleCheckoutExpired(com.stripe.model.Event event) {
