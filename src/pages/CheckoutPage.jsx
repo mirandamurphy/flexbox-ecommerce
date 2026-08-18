@@ -1,24 +1,20 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { createCheckoutSession } from "../services/checkoutService";
 
 function CheckoutPage() {
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { cartItems, cartTotal } = useCart();
 
   const [formData, setFormData] = useState({
     fullName: "",
-    email: "",
+    email: currentUser?.email || "",
     address: "",
     city: "",
     province: "",
     postalCode: "",
-    cardholderName: "",
-    cardNumber: "",
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,6 +32,11 @@ function CheckoutPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+
+    if (!currentUser) {
+      setError("You must be logged in to checkout.");
+      return;
+    }
 
     if (cartItems.length === 0) {
       setError("Your cart is empty.");
@@ -55,13 +56,18 @@ function CheckoutPage() {
 
     try {
       const response = await createCheckoutSession(currentUser.id);
-      // Redirects to Stripe's hosted checkout page. The card fields
-      // above are not sent anywhere, Stripe collects real payment
-      // details on its own page, not through this form.
+
+      if (!response.data?.checkoutUrl) {
+        throw new Error("Checkout URL was not returned by the server.");
+      }
+
       window.location.href = response.data.checkoutUrl;
     } catch (checkoutError) {
       const message =
-        checkoutError.response?.data?.detail || checkoutError.message;
+        checkoutError.response?.data?.detail ||
+        checkoutError.message ||
+        "Unable to start checkout.";
+
       setError(message);
       setIsProcessing(false);
     }
@@ -162,30 +168,9 @@ function CheckoutPage() {
             <h2>Payment</h2>
 
             <p className="form-note">
-              Demo payment form. Stripe integration will replace
-              these fields.
+              You will be redirected to Stripe's secure checkout page
+              to complete your payment.
             </p>
-
-            <label>
-              Cardholder Name
-              <input
-                name="cardholderName"
-                value={formData.cardholderName}
-                onChange={handleChange}
-                required
-              />
-            </label>
-
-            <label>
-              Test Card Number
-              <input
-                name="cardNumber"
-                value={formData.cardNumber}
-                onChange={handleChange}
-                placeholder="4242 4242 4242 4242"
-                required
-              />
-            </label>
           </section>
 
           {error && <p className="error-message">{error}</p>}
@@ -196,8 +181,10 @@ function CheckoutPage() {
             disabled={isProcessing}
           >
             {isProcessing
-              ? "Processing Payment..."
-              : `Place Order — $${cartTotal.toFixed(2)}`}
+              ? "Redirecting to Stripe..."
+              : `Continue to Secure Payment — $${Number(
+                  cartTotal
+                ).toFixed(2)}`}
           </button>
         </form>
 
@@ -211,14 +198,19 @@ function CheckoutPage() {
               </span>
 
               <span>
-                ${(item.price * item.quantity).toFixed(2)}
+                $
+                {(
+                  Number(item.price) * item.quantity
+                ).toFixed(2)}
               </span>
             </div>
           ))}
 
           <div className="summary-total">
             <strong>Total</strong>
-            <strong>${cartTotal.toFixed(2)}</strong>
+            <strong>
+              ${Number(cartTotal).toFixed(2)}
+            </strong>
           </div>
         </aside>
       </div>
