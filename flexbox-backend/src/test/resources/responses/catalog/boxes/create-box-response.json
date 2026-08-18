@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "name": "Yoga Box",
+  "description": "Monthly yoga fitness box",
+  "imagePath": "/images/yoga_box.jpg",
+  "availableUnits": 10,
+  "isActive": true
+}

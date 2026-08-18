@@ -4,19 +4,28 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.postgresql.PostgreSQLContainer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
-    public PostgreSQLContainer postgresContainer() {
-        // Keeping the simpler default-superuser setup for now, proven working
-        // against all existing tests. A more production-realistic version
-        // exists (mounting the real role-creation init scripts), worth
-        // adopting for A4 once there is time to verify it end to end.
-        return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"))
-                .withUrlParam("stringtype", "unspecified");
+    PostgreSQLContainer postgresContainer() {
+        return new PostgreSQLContainer("postgres:18")
+                .withDatabaseName("flexbox_test")
+                .withEnv("APP_DB", "flexbox_test")
+                .withEnv("DB_MIGRATION_ROLE", "flexbox_migration")
+                .withEnv("MIGRATION_DB_PASSWORD", "migration_test_password")
+                .withEnv("DB_APP_ROLE", "flexbox_app")
+                .withEnv("DB_APP_PASSWORD", "app_test_password")
+                .withCopyFileToContainer(
+                        MountableFile.forClasspathResource("init-scripts/01_create_roles_app.sh"),
+                        "/docker-entrypoint-initdb.d/01_create_roles_app.sh"
+                )
+                .withCopyFileToContainer(
+                        MountableFile.forClasspathResource("init-scripts/02_grant_privileges_app.sh"),
+                        "/docker-entrypoint-initdb.d/02_grant_privileges_app.sh"
+                );
     }
 }

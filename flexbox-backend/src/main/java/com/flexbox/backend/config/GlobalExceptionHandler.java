@@ -3,9 +3,9 @@ package com.flexbox.backend.config;
 import com.flexbox.backend.auth.InvalidCredentialsException;
 import com.flexbox.backend.cart.InsufficientStockException;
 import com.flexbox.backend.cart.InvalidQuantityException;
-import com.flexbox.backend.catalog.exception.ProductNotFoundException;
-import com.flexbox.backend.catalog.exception.SubscriptionBoxNotFoundException;
-import com.flexbox.backend.catalog.exception.SubscriptionBoxPriceNotFoundException;
+import com.flexbox.backend.common.exception.BusinessRuleException;
+import com.flexbox.backend.common.exception.ResourceAlreadyExistsException;
+import com.flexbox.backend.common.exception.ResourceNotFoundException;
 import com.flexbox.backend.order.OrderNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,70 +15,57 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    /*
-    Logging strategy:
-    Domain Errors (4xx): Warn
-    System Errors (5xx): Error
-     */
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ProblemDetail handleResourceConflict(ResourceAlreadyExistsException e){
 
-    /*
-    Exceptions for Product Catalog
-     */
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ProblemDetail handleProductNotFound(ProductNotFoundException e) {
-        log.warn("Product lookup failed: {}", e.getMessage());
+        var problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                e.getMessage());
+
+        problem.setTitle("Resource Already Exists");
+        problem.setProperty("timestamp", OffsetDateTime.now());
+        return problem;
+
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ProblemDetail handleResourceNotFound(ResourceNotFoundException e){
 
         var problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
-                e.getMessage()
-        );
+                e.getMessage());
 
-        problem.setTitle("Product Not Found");
-        problem.setProperty("timestamp", Instant.now());
-
+        problem.setTitle("Resource Not Found");
+        problem.setProperty("timestamp", OffsetDateTime.now());
         return problem;
     }
 
-    @ExceptionHandler(SubscriptionBoxNotFoundException.class)
-    public ProblemDetail handleSubscriptionBoxNotFound(SubscriptionBoxNotFoundException e) {
-        log.warn("Subscription box lookup failed: {}", e.getMessage());
+    @ExceptionHandler(BusinessRuleException.class)
+    public ProblemDetail handleBusinessRule(BusinessRuleException e){
 
         var problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
-                e.getMessage()
-        );
+                HttpStatus.BAD_REQUEST,
+                e.getMessage());
 
-        problem.setTitle("Subscription Box Not Found");
-        problem.setProperty("timestamp", Instant.now());
-
+        problem.setTitle("Bad Request");
+        problem.setProperty("timestamp", OffsetDateTime.now());
         return problem;
+
     }
 
-    @ExceptionHandler(SubscriptionBoxPriceNotFoundException.class)
-    public ProblemDetail handleSubscriptionBoxPriceNotFound(SubscriptionBoxPriceNotFoundException e) {
-        log.warn("Subscription box price lookup failed: {}", e.getMessage());
-
-        var problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND,
-                e.getMessage()
-        );
-
-        problem.setTitle("Subscription Box Price Not Found");
-        problem.setProperty("timestamp", Instant.now());
-
-        return problem;
-    }
 
     /*
-    Exceptions for Auth
-     */
+   Exceptions for Auth
+    */
     @ExceptionHandler(InvalidCredentialsException.class)
     public ProblemDetail handleInvalidCredentials(InvalidCredentialsException e) {
         log.warn("Login failed: {}", e.getMessage());
@@ -171,6 +158,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return problem;
     }
+
+
+
 
 
 }

@@ -2,6 +2,6 @@ package com.flexbox.backend.payment;
 
 public enum PaymentMethodType {
     CARD,
-    PAYAL,
+    PAYPAL,
     PRE_AUTHORIZED_DEBIT
 }

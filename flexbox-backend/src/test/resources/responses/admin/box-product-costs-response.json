@@ -1,0 +1,26 @@
+{
+  "data": [
+    {
+      "subscriptionBoxId": 1,
+      "productId": 1,
+      "boxName": "Running Box",
+      "brand": "Sunny",
+      "productName": "Sunscreen",
+      "categoryId": 1,
+      "categoryName": "personal care",
+      "quantity": 1,
+      "productCost": 1.02
+    },
+    {
+      "subscriptionBoxId": 1,
+      "productId": 2,
+      "boxName": "Running Box",
+      "brand": "Comfy",
+      "productName": "Socks",
+      "categoryId": 2,
+      "categoryName": "apparel",
+      "quantity": 2,
+      "productCost": 1.56
+    }
+  ]
+}

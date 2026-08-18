@@ -1,6 +1,6 @@
 package com.flexbox.backend.auth;
 
-import com.flexbox.backend.repository.UserRepository;
+import com.flexbox.backend.user.repository.UserRepository;
 import com.flexbox.backend.security.JwtService;
 import com.flexbox.backend.user.User;
 import org.springframework.security.crypto.password.PasswordEncoder;

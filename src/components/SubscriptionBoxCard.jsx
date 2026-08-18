@@ -3,18 +3,28 @@ import { Link } from "react-router-dom";
 function SubscriptionBoxCard({ box }) {
   return (
     <article className="box-card">
-      <div className="box-card__content">
-        <p className="box-card__category">{box.category}</p>
+      {box.imageUrl && (
+        <img
+          className="box-card__image"
+          src={box.imageUrl}
+          alt={box.name}
+        />
+      )}
 
+      <div className="box-card__content">
         <h2>{box.name}</h2>
 
-        <p>{box.description}</p>
+        {box.description && (
+          <p>{box.description}</p>
+        )}
 
         <p className="box-card__price">
-          ${box.price.toFixed(2)} / month
+          {box.currency} ${Number(box.price).toFixed(2)}
         </p>
 
-        <p>Stock: {box.stock}</p>
+        <p>
+          Status: {box.active ? "Available" : "Unavailable"}
+        </p>
 
         <Link
           className="primary-button"

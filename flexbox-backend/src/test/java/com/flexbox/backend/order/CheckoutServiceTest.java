@@ -3,7 +3,7 @@ package com.flexbox.backend.order;
 import com.flexbox.backend.cart.CartItemRepository;
 import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartItem;
-import com.flexbox.backend.catalog.model.SubscriptionBox;
+import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 import com.flexbox.backend.payment.Payment;
 import com.flexbox.backend.payment.PaymentRepository;
 import com.flexbox.backend.payment.PaymentStatus;

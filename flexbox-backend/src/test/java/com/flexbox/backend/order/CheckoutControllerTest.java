@@ -4,7 +4,7 @@ import com.flexbox.backend.cart.CartRepository;
 import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartStatus;
 import com.flexbox.backend.payment.Payment;
-import com.flexbox.backend.repository.UserRepository;
+import com.flexbox.backend.user.repository.UserRepository;
 import com.flexbox.backend.user.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

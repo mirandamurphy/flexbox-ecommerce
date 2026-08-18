@@ -7,7 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FlexboxBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FlexboxBackendApplication.class, args);
-    }
+        try {
+            SpringApplication.run(FlexboxBackendApplication.class, args);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            System.err.flush();
 
+        }
+
+    }
 }

@@ -2,7 +2,8 @@ package com.flexbox.backend.cart;
 
 import com.flexbox.backend.cart.model.Cart;
 import com.flexbox.backend.cart.model.CartItem;
-import com.flexbox.backend.catalog.model.SubscriptionBox;
+
+import com.flexbox.backend.catalog.box.model.SubscriptionBox;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
