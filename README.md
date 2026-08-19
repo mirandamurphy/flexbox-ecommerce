@@ -67,7 +67,7 @@ flexbox/
 │   └── services/
 │
 ├── .gitignore
-├── docker-compose.yml
+├── docker-compose.yaml
 ├── package.json
 ├── vite.config.js
 └── README.md
@@ -203,7 +203,7 @@ npm run dev
 The frontend runs at:
 
 ```text
-http://localhost:3000
+http://localhost:5173
 ```
 
 It expects the backend to be available at:
@@ -249,6 +249,13 @@ The backend exposes REST endpoints under `/api`. Key endpoints:
 
 For detailed API documentation, see:
 - [Catalog API Documentation](docs/api/product-catalog-api.md).
+
+## Known Limitations
+
+- The JWT filter chain does not enforce authentication yet, `SecurityConfig` currently permits all traffic so the application is usable while that piece is still being built. Role-based access control has no enforcement mechanism in place either.
+- `userId` is passed as a request parameter on cart and checkout endpoints rather than read from the authenticated session, since there is no JWT filter yet to provide it.
+- Newsletter subscription opt-in is not implemented. Order confirmation email is implemented and sends automatically on successful checkout.
+- The frontend has no automated test coverage yet.
 
 ## Team
 
