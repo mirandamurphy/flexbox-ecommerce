@@ -9,9 +9,10 @@ RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code and compile
-# -DskipTest is added because tests use Testcontainers
+# -DskipTests is added because tests use Testcontainers, which needs a
+# Docker socket that is not available inside the image build step itself
 COPY src ./src
-RUN ./mvnw clean package -DskipTest
+RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
